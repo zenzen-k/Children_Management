@@ -1,0 +1,146 @@
+-- 직급 테이블
+
+drop table emp;
+create table emp(
+	emp_no number primary key,
+	e_name varchar2(20) not null
+);
+
+insert into emp values(501, '원장');
+insert into emp values(502, '원감');
+insert into emp values(201, '주임교사');
+insert into emp values(202, '담임교사');
+insert into emp values(203, '부담임교사');
+
+select * from emp;
+commit;
+
+
+-- 교실
+drop sequence c_seq;
+create sequence c_seq
+	increment by 1
+	start with 1
+	minvalue 1
+	nocache;
+
+drop table classroom;
+create table classroom(
+	c_no number primary key,
+	c_name varchar2(20) not null,
+	c_age number not null
+);
+
+insert into classroom values(0, '전체관리자', 0); 
+insert into classroom values(c_seq.nextval, '새싹반', 3);
+insert into classroom values(c_seq.nextval, '열매반', 4);
+insert into classroom values(c_seq.nextval, '햇살반', 5);
+insert into classroom values(c_seq.nextval, '달님반', 5);
+
+select * from classroom;
+commit;
+
+
+-- 회원(교사)
+drop table teacher;
+create table teacher(
+	t_id varchar2(20) primary key, --영소문자 숫자
+	t_pw varchar2(16) not null, -- 대문자 소문자 숫자
+	c_no number not null,
+	emp_no varchar2(20) not null,
+	t_name varchar2(30) not null, -- 한글, 영어
+	t_phone varchar2(15) not null
+);
+
+insert into teacher values('sys', 'sys1234', 0, 501, '관리자', '010-2222-5555');
+
+select * from teacher;
+commit;
+
+
+
+-- 이미지
+drop table img;
+create table img(
+	img_id number primary key,
+	img_name varchar2(50)
+);
+
+commit;
+
+
+
+-- 학생
+drop table person;
+create table person(
+	p_no number primary key,
+	p_name varchar2(30) not null,
+	p_birth date not null,
+	gender varchar2(5) default '남' check(gender in('남','여')),
+	p_entran date default sysdate not null ,	
+	addr varchar2(120),
+	img_id number,
+	c_no number,
+	note varchar2(100)
+);
+
+insert into person
+values(230101, '김유정', '19-5-3', '여' ,'23-03-02', '인천시 남동구 간석2동 감자아파트 1007동 102호',0,1,'땅콩알러지');
+insert into person
+values(220212, '정시율', '18-4-8', '남' ,'22-03-02', '인천시 연수구 송도동 고구마아파트 204동 1108호',0,2,'방과후교실');
+
+select * from person;
+commit;
+
+
+
+-- 가족
+drop table family;
+create table family(
+	p_no number references person(p_no) on delete cascade, -- person(p_no)의 자식테이블
+	f_relations varchar2(10) not null,
+	f_name varchar2(30) not null,
+	f_birth date,
+	f_phone varchar2(15) not null
+);
+
+insert into family values(230101, '부', '김영광', '1990-11-10', '010-1234-1234');
+
+select * from family;
+commit;
+
+
+select * from person natural join family;
+
+
+
+-- 신체발달
+drop table physicalDev;
+create table physicalDev(
+	p_no number references person(p_no) on delete cascade, -- person(p_no)의 자식테이블
+	pd_age varchar2(15) not null,
+	pd_date date,
+	weight decimal(5,2),
+	height decimal(5,2)
+);
+
+insert into physicalDev values(220212, '3세 1학기', '2022-03-30', 18.5 ,100.07);
+select * from physicalDev;
+commit;
+
+select p_name, weight, height from physicalDev natural join person;
+
+
+-- 출결상황
+drop table attend_book;
+create table attend_book(
+	p_no number references person(p_no) on delete cascade, -- person(p_no)의 자식테이블
+	attend number default 0,
+	absence number default 0,
+	earlier number default 0,
+	classday number default 180
+);
+
+insert into attend_book(p_no) values(220212);
+select * from attend_book;
+commit;

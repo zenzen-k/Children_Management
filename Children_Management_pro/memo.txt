@@ -1,0 +1,17 @@
+
+create or replace function login(id varchar2, pw varchar2)
+return number as
+
+log number := 0;
+
+begin
+	for i in(select t_id, t_pw from teacher) loop
+		exit when log = 1;
+		if (id = i.t_id and pw = i.t_pw) then log:= 1;
+		else log:= 0;
+		end if;
+	end loop;
+	return log;
+end;
+/
+
