@@ -65,4 +65,30 @@ public class EmpDao {
 			e.printStackTrace();
 		}
 	} // exit()
+
+	public int empNo(String empCh) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql = "select emp_no from emp where e_name = ?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, empCh);
+			rs = ps.executeQuery();
+			if(rs.next())
+				result = rs.getInt("emp_no");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null)
+					ps.close();
+				if(rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 }

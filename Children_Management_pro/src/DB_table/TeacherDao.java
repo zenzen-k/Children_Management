@@ -57,6 +57,7 @@ public class TeacherDao {
 		return cnt;
 	} // getLogin
 	
+	
 	public void exit() {
 		if(conn!=null)
 		try {
@@ -66,5 +67,32 @@ public class TeacherDao {
 			e.printStackTrace();
 		}
 	} // exit()
+
+	
+	public int insertTeacher(TeacherBean tb) {
+		PreparedStatement ps = null;
+		int cnt = -1;
+		String sql = "insert into teacher values(?,?,?,?,?,?)";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, tb.getT_id());
+			ps.setString(2, tb.getT_pw());
+			ps.setInt(3, tb.getC_no());
+			ps.setInt(4, tb.getEmp_no());
+			ps.setString(5, tb.getT_name());
+			ps.setString(6, tb.getT_phone());
+			cnt = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(ps != null)
+					ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return cnt;
+	} // insertTeacher
 	
 } // TeacherDao 클래스

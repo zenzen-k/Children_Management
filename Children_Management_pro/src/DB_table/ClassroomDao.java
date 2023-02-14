@@ -27,13 +27,13 @@ public class ClassroomDao {
 			e.printStackTrace();
 		}
 	} // ClassroomDao()
-
+	
+	// 관리자를 제외한 모든 반 조회
 	public ArrayList<ClassroomBean> setClassChoice() {
-		
 		ArrayList<ClassroomBean> lists = new ArrayList<ClassroomBean>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String sql = "select c_name from classroom where c_no > 0";
+		String sql = "select * from classroom where c_no > 0";
 		try {
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
@@ -67,4 +67,34 @@ public class ClassroomDao {
 			e.printStackTrace();
 		}
 	} // exit()
+	
+	
+	// c_name의 c_no조회
+	public int classNo(String classCh) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql = "select c_no from classroom where c_name = ?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, classCh);
+			rs = ps.executeQuery();
+			if(rs.next())
+				result = rs.getInt("c_no");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null)
+					ps.close();
+				if(rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	} //classNo()
+	
+	
 }
