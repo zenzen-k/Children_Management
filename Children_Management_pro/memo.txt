@@ -1,17 +1,24 @@
+select rownum, p_no, p_name, p_birth, p_entran, c_name, c_age from person, classroom where person.c_no = classroom.c_no;
 
-create or replace function login(id varchar2, pw varchar2)
-return number as
+-- 전체조회
+select rownum, p_no, p_name, p_birth, p_entran, c_name, c_age, t_name  
+from (select rownum, p_no, p_name, p_birth, p_entran, c_name, c_age, classroom.c_no from person, classroom 
+where person.c_no = classroom.c_no order by p_name, p_birth) cp, teacher 
+where cp.c_no = teacher.c_no;
 
-log number := 0;
 
-begin
-	for i in(select t_id, t_pw from teacher) loop
-		exit when log = 1;
-		if (id = i.t_id and pw = i.t_pw) then log:= 1;
-		else log:= 0;
-		end if;
-	end loop;
-	return log;
-end;
-/
+
+
+select p_no, p_name, p_birth, p_entran, c_name, c_age, t_name  
+from (select * from person natural join classroom order by p_name asc, p_birth asc) 
+natural join teacher order by p_name asc, p_birth asc;
+
+
+select t_name, c_name, e_name from (select t_name, c_name, emp_no 
+from teacher, classroom where teacher.c_no = classroom.c_no and t_id = 'sys') natural join emp;
+
+
+-> 수정버튼누르면활성화하게끔하면될듯 ㅎ
+txtId.setText("0"); // 기본값으로 0을 넣음
+txtId.setEnabled(false); // 입력할 수 없게 함
 

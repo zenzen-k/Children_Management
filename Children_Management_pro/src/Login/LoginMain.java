@@ -1,6 +1,9 @@
+package Login;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -16,17 +19,17 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import DB_table.TeacherDao;
-import Main.ChildMain;
+import Home.ChildMain;
 
 public class LoginMain extends JFrame implements ActionListener{
 	
-	JTextField txtId = new JTextField();
+	private JTextField txtId = new JTextField();
 	// 비밀번호를 안보이게 입력받기 위해서 정의함. 일반 텍스트필드로 하면 우측 코드 사용불가 -> txtPw.setEchoChar('*');
-	JPasswordField txtPw = new JPasswordField();
-	JTable table = null;
-	JButton btnSignUp, btnSignIn;
+	private JPasswordField txtPw = new JPasswordField();
+	private JTable table = null;
+	private JButton btnSignUp, btnSignIn;
 	
-	TeacherDao tdao = new TeacherDao();
+	private TeacherDao tdao = new TeacherDao();
 	
 	public LoginMain(String title){
 		super(title);
@@ -36,11 +39,20 @@ public class LoginMain extends JFrame implements ActionListener{
 		
 		// 창설정. 창크기 고정
 		setSize(500, 600);
-		setLocation(400, 250);
+		
+		// Toolkit -> 사용자 인터페이스 작성, 그래픽스, 등의 클래스이다. 여기서 사용자의 화면 크기를 알아낼 수 있다.
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // 화면의 크기를 알아내는 메서드
+		// this.getSize() 현재 프레임창의 사이즈를 가져온다.
+		// 가운데 위치하기 위해 아래의 코드를 사용하였다.
+		// (전체 화면 가로길이 - 프레임의 가로길이)/2 를 하면 프레임을 가운데 띄웠을 때 x의 위치가 어디서 시작될지 구할 수 있다. 
+		// y값도 동일하게 구해준다.
+		setLocation((screenSize.width - this.getSize().width)/2, (screenSize.height - this.getSize().height)/2);
+		//setLocation(400, 250);
+		
 		setVisible(true);
 		setResizable(false);
 //		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.addWindowListener(new MyWindow());
+		this.addWindowListener(new WindowExit());
 	}
 	
 	/* 화면 구성 메서드 */
@@ -137,15 +149,15 @@ public class LoginMain extends JFrame implements ActionListener{
 				messege = "로그인에 성공하였습니다.";
 				tit = "login 성공";
 				JOptionPane.showMessageDialog(this, messege, tit, JOptionPane.INFORMATION_MESSAGE);
-				new ChildMain("유아 관리 프로그램");
+				new ChildMain("유아 관리 프로그램", logid);
 				// 로그인 성공 시 로그인 창을 숨긴다.
 				setVisible(false);
 			}
 		}
 	} // actionPerforme()
 	
-	// MyWindow
-	class MyWindow extends WindowAdapter { 
+	// WindowExit
+	class WindowExit extends WindowAdapter { 
 		public void windowClosing(WindowEvent e) {
 			tdao.exit();
 			System.exit(0); // 프로그램 종료

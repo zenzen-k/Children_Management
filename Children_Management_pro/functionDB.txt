@@ -1,0 +1,46 @@
+
+-- 로그인 확인 함수. 아이디와 패스워드가 일치하면 1을 리턴하며, 일치하지 않으면 0을 리턴한다.
+create or replace function login(id varchar2, pw varchar2)
+return number as
+
+log number := 0;
+
+begin
+	for i in(select t_id, t_pw from teacher) loop
+		exit when log = 1;
+		if (id = i.t_id and pw = i.t_pw) then log:= 1;
+		else log:= 0;
+		end if;
+	end loop;
+	return log;
+end;
+/
+
+
+-- 학생번호부여 함수 (yy0000)
+-- 값을 넘길 때 (p_entran, p_seq.nextval)
+drop function stunum;
+create or replace function stunum(p_entran date, seq number)
+return varchar2 as
+
+snum varchar2(10);
+dnum varchar2(10);
+
+begin
+	
+	dnum := to_char(p_entran, 'yy');
+	
+	if seq<10 then snum := dnum || '000'|| to_char(seq);
+	elsif seq<100 then snum := dnum || '00'|| to_char(seq);
+	elsif seq<1000 then snum := dnum || '0'|| to_char(seq);
+	else snum := dnum || '0'|| to_char(seq);
+	
+	end if;
+	
+return snum;
+
+end;
+/
+
+select stunum(p_entran, p_seq.nextval) from person;
+insert into  person values(stunum(입학일자, p_seq.nextval), 이름, 입학일자, 성별, 주소, 이미지번호, 반번호, 특이사항);

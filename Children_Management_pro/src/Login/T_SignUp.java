@@ -1,7 +1,10 @@
+package Login;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -23,27 +26,27 @@ import DB_table.*;
 
 public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 
-	ClassroomDao cDao = new ClassroomDao();
-	EmpDao eDao = new EmpDao();
-	int classCh2 = 0;
-	int empCh2 = 0;
-	int indexC, indexE;
+	private ClassroomDao cDao = new ClassroomDao();
+	private EmpDao eDao = new EmpDao();
+	private int classCh2 = 0;
+	private int empCh2 = 0;
+	private int indexC, indexE;
 
-	JTextField txtId = new JTextField();
-	JPasswordField txtPw = new JPasswordField();
-	JTextField txtName = new JTextField();
-	JTextField txtPhone = new JTextField();
-	Choice cClass = new Choice();
-	Choice cEmp = new Choice();
-	JButton btn = new JButton();
+	private JTextField txtId = new JTextField();
+	private JPasswordField txtPw = new JPasswordField();
+	private JTextField txtName = new JTextField();
+	private JTextField txtPhone = new JTextField();
+	private Choice cClass = new Choice();
+	private Choice cEmp = new Choice();
+	private JButton btn = new JButton();
 
-	JLabel lbId = new JLabel("아이디 :");
-	JLabel lbPw = new JLabel("패스워드 :");
-	JLabel lbName = new JLabel("이름 :");
-	JLabel lbPhone = new JLabel("전화번호 :");
-	JLabel lbClass = new JLabel("담당 반 :");
-	JLabel lbEmp = new JLabel("직급 :");
-
+	private JLabel lbId = new JLabel("아이디 :");
+	private JLabel lbPw = new JLabel("패스워드 :");
+	private JLabel lbName = new JLabel("이름 :");
+	private JLabel lbPhone = new JLabel("전화번호 :");
+	private JLabel lbClass = new JLabel("담당 반 :");
+	private JLabel lbEmp = new JLabel("직급 :");
+	
 	public T_SignUp(String title) {
 		super(title);
 		
@@ -55,7 +58,8 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 		
 		// 창설정. 창크기 고정
 		setSize(500, 600);
-		setLocation(400, 250);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((screenSize.width - this.getSize().width)/2, (screenSize.height - this.getSize().height)/2);
 		setVisible(true);
 		setResizable(false);
 
@@ -252,6 +256,7 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 				clearTextField();
 				// 가입이 완료되면 창을 숨김
 				setVisible(false);
+				exit();
 			} else {
 				JOptionPane.showMessageDialog(this, "ERROR. 다시 가입해주세요.", "ERROR", JOptionPane.ERROR_MESSAGE);
 				clearTextField();
@@ -314,4 +319,9 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 			}
 		}
 	} // KeyAdapter
+	
+	public void exit() {
+		cDao.exit();
+		eDao.exit();
+	}
 }

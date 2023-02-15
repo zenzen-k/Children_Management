@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class TeacherDao {
 	
@@ -69,6 +70,7 @@ public class TeacherDao {
 	} // exit()
 
 	
+	// 회원가입
 	public int insertTeacher(TeacherBean tb) {
 		PreparedStatement ps = null;
 		int cnt = -1;
@@ -94,5 +96,7 @@ public class TeacherDao {
 		}
 		return cnt;
 	} // insertTeacher
+
+	
 	
 } // TeacherDao 클래스

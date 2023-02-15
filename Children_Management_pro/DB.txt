@@ -68,6 +68,15 @@ create table img(
 
 commit;
 
+-- 학번시퀀스
+
+drop sequence p_seq;
+create sequence p_seq
+	increment by 1
+	start with 1
+	minvalue 1
+	nocache;
+
 
 
 -- 학생
@@ -77,7 +86,7 @@ create table person(
 	p_name varchar2(30) not null,
 	p_birth date not null,
 	gender varchar2(5) default '남' check(gender in('남','여')),
-	p_entran date default sysdate not null ,	
+	p_entran date default sysdate not null , --입학일
 	addr varchar2(120),
 	img_id number,
 	c_no number,
@@ -138,7 +147,8 @@ create table attend_book(
 	attend number default 0,
 	absence number default 0,
 	earlier number default 0,
-	classday number default 180
+	classday number default 180, -- 수업일수
+	adate date default sysdate
 );
 
 insert into attend_book(p_no) values(220212);
