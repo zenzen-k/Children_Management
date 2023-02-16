@@ -24,7 +24,7 @@ public class Home extends JFrame implements ActionListener{
 
 	//컬럼명 rownum - 인덱스번호+1 , p_no, p_name, p_birth, p_entran, c_name, c_age, t_name 
 	// order by p_name;
-	private String[] columnName = {"NO","유아번호","이름","생년월일","입학일","교실","연령","담임교사"};
+	private String[] columnName = {"NO","유아번호","이름","생년월일","입학일","교실","연령(만)","담임교사"};
 	private Object[][] rowData; // 테이블내용
 	private JTable table = null;
 	private JScrollPane scrollPane = null;
@@ -349,7 +349,7 @@ public class Home extends JFrame implements ActionListener{
 		txtAddr.setEditable(false);
 		txtNote.setEditable(false);
 
-
+		// 이벤트리스너
 		btnLogout.addActionListener(this);
 		btnExitPro.addActionListener(this);
 		btnSelect.addActionListener(this);
@@ -358,6 +358,7 @@ public class Home extends JFrame implements ActionListener{
 		btnFilter.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnUpImg.addActionListener(this);
+		btnDelete.addActionListener(this);
 	} //Rcompose()
 
 	/* 가져온 데이터 rowData에넣기 */
@@ -543,6 +544,11 @@ public class Home extends JFrame implements ActionListener{
 				getSearch(selcName);
 			}
 		}
+		else if(obj == btnDelete) { // 삭제
+			System.out.println("삭제");
+			personDelete();
+			getJoinTable();
+		}
 		else if(obj == btnInsert) { // 추가
 			System.out.println("추가");
 			new addPerson("유아 등록");
@@ -569,7 +575,26 @@ public class Home extends JFrame implements ActionListener{
 		}
 		
 		tableSet();
-	}
+	} //actionPerformed
+
+	private void personDelete() {
+		// 행을 클릭 안하고 삭제 버튼 눌렀을 때
+		try {
+			int row = table.getSelectedRow();
+
+			int p_no = (int)table.getValueAt(row, 1);
+			int cnt = pdao.personDelete(p_no);
+			System.out.println("delete cnt : " + cnt);
+			if(cnt > 0)
+				JOptionPane.showMessageDialog(this, "정상적으로 삭제되었습니다", "success", JOptionPane.INFORMATION_MESSAGE);
+			else 
+				JOptionPane.showMessageDialog(this, "삭제 중 오류", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+		}catch(ArrayIndexOutOfBoundsException e) {
+			JOptionPane.showMessageDialog(this, "접근불가 : 삭제할 행을 클릭하세요", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+		
+	} // personDelete
 
 	// 수정메서드
 	private void InfoUpdate() {
@@ -649,7 +674,7 @@ public class Home extends JFrame implements ActionListener{
 		// 테이블 컬럼별 길이 설정
 		// 해보니까 가로길이를 설정해놨기 때문에 필요한것만 조정하면 나머지는 남은 너비에서 알아서 자동조정되는듯!
 		table.getColumn("NO").setPreferredWidth(30);
-		table.getColumn("연령").setPreferredWidth(30);
+		table.getColumn("연령(만)").setPreferredWidth(60);
 		table.getColumn("생년월일").setPreferredWidth(100);
 		table.getColumn("입학일").setPreferredWidth(100);
 	}

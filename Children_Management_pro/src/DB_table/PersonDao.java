@@ -151,8 +151,38 @@ public class PersonDao {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null)
+					ps.close();
+				if(rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return cnt;
-	}
+	} // personNum
+	
+	// 학생삭제
+	public int personDelete(int p_no) {
+		int cnt = -1;
+		PreparedStatement ps = null;
+		String sql = "delete person where p_no = " + p_no;
+		try {
+			ps = conn.prepareStatement(sql);
+			cnt = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null)
+					ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return cnt;
+	} // personDelete
 	
 }
