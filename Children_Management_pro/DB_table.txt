@@ -101,7 +101,9 @@ values(220212, '정시율', '18-4-8', '남' ,'22-03-02', '인천시 연수구 �
 select * from person;
 commit;
 
-
+insert into person 
+values(stunum('2017-05-05', p_seq.nextval), '안유진', '2021-03-02', '여', '2017-05-05', 
+'인천시 남동구 구월동 아이브아파트', 0, 3, '없음');
 
 -- 가족
 drop table family;
@@ -122,18 +124,17 @@ commit;
 select * from person natural join family;
 
 
-
+-- 학생객체가 생성되면 자동으로 학기만 데이터 생성하게 만들기
 -- 신체발달
 drop table physicalDev;
 create table physicalDev(
 	p_no number references person(p_no) on delete cascade, -- person(p_no)의 자식테이블
 	pd_age varchar2(15) not null,
-	pd_date date,
 	weight decimal(5,2),
 	height decimal(5,2)
 );
 
-insert into physicalDev values(220212, '3세 1학기', '2022-03-30', 18.5 ,100.07);
+insert into physicalDev values(220212, '3세 1학기', 18.5 ,100.07);
 select * from physicalDev;
 commit;
 

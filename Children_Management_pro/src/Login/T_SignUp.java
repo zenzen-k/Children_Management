@@ -211,7 +211,7 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 			return false;
 		}
 		return true;
-	} // checkData
+	} // 
 	
 	// 폰트설정
 	private void font() {
@@ -254,9 +254,8 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 			if(cnt > 0) {
 				JOptionPane.showMessageDialog(this, "회원가입이 완료되었습니다.", "Login", JOptionPane.INFORMATION_MESSAGE);
 				clearTextField();
-				// 가입이 완료되면 창을 숨김
-				setVisible(false);
-				exit();
+				close();
+				dispose(); // 가입완료시 창을 닫음
 			} else {
 				JOptionPane.showMessageDialog(this, "ERROR. 다시 가입해주세요.", "ERROR", JOptionPane.ERROR_MESSAGE);
 				clearTextField();
@@ -320,7 +319,7 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 		}
 	} // KeyAdapter
 	
-	public void exit() {
+	public void close() {
 		cDao.exit();
 		eDao.exit();
 	}

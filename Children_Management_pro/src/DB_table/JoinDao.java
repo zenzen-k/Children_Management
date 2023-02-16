@@ -108,4 +108,44 @@ public class JoinDao {
 		return lists;
 	}//getTeacher
 
+	public ArrayList<JoinBean> getSearch(String selcName) {
+		ArrayList<JoinBean> lists = new ArrayList<JoinBean>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "select p_no, p_name, p_birth, p_entran, c_name, c_age, t_name "
+				+ "from (select * from person natural join classroom order by p_name asc, p_birth asc) "
+				+ "natural join teacher where p_name like '%"+selcName+"%' "
+				+ "order by p_name asc, p_birth asc";
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				JoinBean jb = new JoinBean();
+				jb.setP_no(rs.getInt("p_no"));
+				jb.setP_name(rs.getString("p_name"));
+				jb.setP_birth(String.valueOf(rs.getDate("p_birth")));
+				jb.setP_entran(String.valueOf(rs.getDate("p_entran")));
+				jb.setC_name(rs.getString("c_name"));
+				jb.setC_age(rs.getInt("c_age"));
+				jb.setT_name(rs.getString("t_name"));
+				lists.add(jb);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null)
+					ps.close();
+				if(rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return lists;
+	}
+	
+	
+
+
 }

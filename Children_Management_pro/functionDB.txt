@@ -43,4 +43,60 @@ end;
 /
 
 select stunum(p_entran, p_seq.nextval) from person;
-insert into  person values(stunum(입학일자, p_seq.nextval), 이름, 입학일자, 성별, 주소, 이미지번호, 반번호, 특이사항);
+-- insert into  person values(stunum(입학일자, p_seq.nextval), 이름, 입학일자, 성별, 주소, 이미지번호, 반번호, 특이사항);
+insert into  person values(stunum('2017-05-05', p_seq.nextval), '안유진', '2021-03-02', '여', '2017-05-05', '인천시 남동구 구월동 아이브아파트', 0, 3, '없음');
+
+
+-----------------------------------------------------------------------------
+
+
+-- 교실번호 -> 교실이름
+create or replace function cnotoname(no number)
+return varchar2 as
+
+name classroom.c_name%type;
+
+begin
+
+	select c_name into name from classroom natural join person where p_no = no;
+
+return name;
+
+end;
+/
+
+-- 교실이름 -> 교실번호
+create or replace function cnametono(name varchar2)
+return number as
+
+no classroom.c_no%type;
+
+begin
+
+	select c_no into no from classroom where c_name = name;
+
+return no;
+
+end;
+
+
+insert into family values();
+
+
+--
+교사번호 -> 교사이름
+create or replace function tnotoname(no number)
+return varchar2 as
+
+name teacher.t_name%type;
+
+begin
+
+	select t_name into name from teacher natural join classroom where c_no = no and not emp_no = 203;
+	
+return name;
+
+end;
+/
+
+

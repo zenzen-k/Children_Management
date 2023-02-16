@@ -19,7 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import DB_table.TeacherDao;
-import Home.ChildMain;
+import Home.Home;
 
 public class LoginMain extends JFrame implements ActionListener{
 	
@@ -50,7 +50,7 @@ public class LoginMain extends JFrame implements ActionListener{
 		//setLocation(400, 250);
 		
 		setVisible(true);
-		setResizable(false);
+		setResizable(false); // 창크기고정
 //		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.addWindowListener(new WindowExit());
 	}
@@ -66,14 +66,10 @@ public class LoginMain extends JFrame implements ActionListener{
 		Font font = new Font("나눔스퀘어 네오 Regular", Font.PLAIN, 15);
 		
 		//환영인사
-		JPanel pnNorth = new JPanel();
-		pnNorth.setLayout(null); // 기본배치관리자 사용X
-		pnNorth.setBounds(125, 100, 400, 60);
-		contentPane.add(pnNorth); 
 		JLabel lbText = new JLabel("환영합니다. 로그인을 해주세요.");
-		lbText.setBounds(10,10,300,50);
+		lbText.setBounds(135,110,300,50);
 		lbText.setFont(fontBold);
-		pnNorth.add(lbText);
+		contentPane.add(lbText);
 		
 		// ID, PW
 		JPanel pnCenter = new JPanel();
@@ -116,11 +112,6 @@ public class LoginMain extends JFrame implements ActionListener{
 		btnSignIn.addActionListener(this);
 	} // Lcompose()
 	
-	//프레임 호출
-	public static void main(String[] args) {
-		new LoginMain("유아 관리 프로그램 - Login");
-	}
-	
 	/* 버튼 이벤트 처리 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -149,9 +140,11 @@ public class LoginMain extends JFrame implements ActionListener{
 				messege = "로그인에 성공하였습니다.";
 				tit = "login 성공";
 				JOptionPane.showMessageDialog(this, messege, tit, JOptionPane.INFORMATION_MESSAGE);
-				new ChildMain("유아 관리 프로그램", logid);
-				// 로그인 성공 시 로그인 창을 숨긴다.
-				setVisible(false);
+				new Home("유아 관리 프로그램", logid);
+//				// 로그인 성공 시 로그인 창을 숨긴다.
+//				setVisible(false);
+				// 프로그램이 종료되는게 아니라 하나의 프레임만 닫히는 메서드!!!!
+				dispose();
 			}
 		}
 	} // actionPerforme()
@@ -162,5 +155,10 @@ public class LoginMain extends JFrame implements ActionListener{
 			tdao.exit();
 			System.exit(0); // 프로그램 종료
 		}
+	}
+
+	//프레임 호출
+	public static void main(String[] args) {
+		new LoginMain("유아 관리 프로그램 - Login");
 	}
 }

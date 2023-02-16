@@ -22,3 +22,25 @@ from teacher, classroom where teacher.c_no = classroom.c_no and t_id = 'sys') na
 txtId.setText("0"); // 기본값으로 0을 넣음
 txtId.setEnabled(false); // 입력할 수 없게 함
 
+
+---
+
+
+select p_name, gender, cnotoname(p_no), to_char(p_birth,'yy-mm-dd'), to_char(p_entran,'yy-mm-dd'), tnotoname(c_no), addr, note
+from person where p_no = 230101;  
+
+
+--
+
+select p_no, p_name, p_birth, p_entran, c_name, c_age, t_name 
+from (select * from person natural join classroom order by p_name asc, p_birth asc) 
+natural join teacher where p_name like '%김%' 
+order by p_name asc, p_birth asc;
+
+
+
+---
+
+
+
+update family set f_name = ? , f_birth = ?, f_phone = ? where p_no = ? and f_relations = ?;
