@@ -1,13 +1,11 @@
 package Home;
 
-import java.awt.BorderLayout;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Panel;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 
 import DB_table.ClassroomBean;
 import DB_table.ClassroomDao;
@@ -34,7 +31,6 @@ import DB_table.FamilyBean;
 import DB_table.FamilyDao;
 import DB_table.PersonBean;
 import DB_table.PersonDao;
-import Home.Home.MouseHandler;
 
 public class addPerson extends JFrame implements ActionListener, ItemListener{
 
@@ -80,10 +76,10 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 	int indexF2 = 0; // 초이스에서 선택한 인덱스를 받아옴 (family1)
 	String fam2Choice = null; // 선택한 항목의 문자열을 저장하는 변수
 	String gen = null;
-	
+
 	addPerson(String title) {
 		super(title);
-		
+
 		compose();
 		setevent();
 		font();
@@ -329,7 +325,7 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 		}
 
 	} // actionPerformed
-	
+
 	//가족테이블에 데이터 추가
 	private void finfoInsert(int no) {
 		FamilyBean fb1 = new FamilyBean();
@@ -339,13 +335,13 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 		fb1.setF_name(txtFInfo1[0].getText());
 		fb1.setF_birth(txtFInfo1[1].getText());
 		fb1.setF_phone(txtFInfo1[2].getText());
-			
+
 		fb2.setP_no(no);
 		fb2.setF_relations(fam2Choice);
 		fb2.setF_name(txtFInfo2[0].getText());
 		fb2.setF_birth(txtFInfo2[1].getText());
 		fb2.setF_phone(txtFInfo2[2].getText());
-		
+
 		int cnt1 = fdao.finfoInsert(fb1);
 		int cnt2 = fdao.finfoInsert(fb2);
 		System.out.println("cnt1 : " + cnt1);
@@ -368,8 +364,8 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 			JOptionPane.showMessageDialog(this, "실패. 관리자에게 문의", "ERROR", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
-	
-	
+
+
 	//학생테이블에 데이터 추가
 	private void infoInsert(int no) {
 		PersonBean pb = new PersonBean();
@@ -393,14 +389,21 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 			System.out.println("insert 실패");
 			JOptionPane.showMessageDialog(this, "실패. 관리자에게 문의", "ERROR", JOptionPane.INFORMATION_MESSAGE);
 		}
-		
+
 	} //infoInsert
-	
-	
+
+
 	// 데이터 검사
 	private boolean checkData() {
 		int checkInfo[] = {10, 50, 50, 40, 33};
 		int checkFInfo[] = {10, 50, 11};
+		
+		String fulldata = "입력값 초과 \n 이름:10글자, \n 주소:40글자, \n메모:33글자 입력 가능";
+		String fulldata2 = "입력값 초과 \n 이름:10글자 번호:11글자 입력가능";
+		String noData = "입력하지 않은 값이 있습니다.";
+		String dataError = "번호를 잘못입력하였습니다. : 11글자 입력";
+		String formatError = "날짜형식을 잘못입력하였습니다. yyyy-mm-dd";
+		
 		// 클래스선택
 		if(indexC == 0) {
 			JOptionPane.showMessageDialog(this, "클래스를 선택하세요", "NoData", JOptionPane.INFORMATION_MESSAGE);
@@ -416,51 +419,109 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 			return false;
 		}
 		
+		
 		// 정보입력검사
 		for(int i=0; i<txtInfo.length; i++) {
 			if(txtInfo[i].getText().length() == 0) {
-				JOptionPane.showMessageDialog(this, "입력하지 않은 값이 있습니다.", "NoData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.INFORMATION_MESSAGE);
 				return false;
 			} else if(txtInfo[i].getText().length() > checkInfo[i]) {
-				JOptionPane.showMessageDialog(this, "입력값 초과 이름:10글자, \n 주소:40글자, 메모:33글자 입력 가능", "FullData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, fulldata, "FullData", JOptionPane.INFORMATION_MESSAGE);
 				return false;
 			}
 		}
 		//가족입력검사
 		for(int i=0; i<txtFInfo1.length; i++) {
 			if(txtFInfo1[i].getText().length() == 0) {
-				JOptionPane.showMessageDialog(this, "입력하지 않은 값이 있습니다.", "NoData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.INFORMATION_MESSAGE);
 				return false;
 			} else if(txtFInfo1[i].getText().length() > checkFInfo[i]) {
-				JOptionPane.showMessageDialog(this, "입력값 초과 \n 이름:10글자 입력가능", "FullData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, fulldata2, "FullData", JOptionPane.INFORMATION_MESSAGE);
 				return false;
 			}
 			if(txtFInfo2[i].getText().length() == 0) {
-				JOptionPane.showMessageDialog(this, "입력하지 않은 값이 있습니다.", "NoData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.INFORMATION_MESSAGE);
 				return false;
 			} else if(txtFInfo2[i].getText().length() > checkFInfo[i]) {
-				JOptionPane.showMessageDialog(this, "입력값 초과 \n 이름:10글자 입력가능", "FullData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, fulldata2 , "FullData", JOptionPane.INFORMATION_MESSAGE);
 				return false;
 			}
 		}
-		return true;
+		if(txtFInfo1[2].getText().length() != 11){
+			JOptionPane.showMessageDialog(this, dataError, "DataError", JOptionPane.INFORMATION_MESSAGE);
+			txtFInfo1[2].requestFocus();
+			return false;
+		}
+		if(txtFInfo2[2].getText().length() != 11){
+			JOptionPane.showMessageDialog(this, dataError, "DataError", JOptionPane.INFORMATION_MESSAGE);
+			txtFInfo2[2].requestFocus();
+			return false;
+		}
+		//날짜형식
+		if(!patnDate(txtInfo[1])) {
+			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
+		if(!patnDate(txtInfo[2])) {
+			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
+		if(!patnDate(txtFInfo1[1])) {
+			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
+		if(!patnDate(txtFInfo2[1])) {
+			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
+		else
+			return true;
 	}
-	
+
+	//날짜형식
+	private boolean patnDate(JTextField jTextField) {
+		String patn = "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$";
+		boolean keyCheck = Pattern.matches(patn, jTextField.getText());
+		if(keyCheck) 
+			return true;
+		else {
+			jTextField.requestFocus();
+			jTextField.setText("");
+			return false;
+		}
+	} // patnDate
+
+
 	class KeyHandler extends KeyAdapter {
 		public void keyReleased(KeyEvent e) {
+			System.out.println("key");
 			Object obj = e.getSource();
+			boolean keyCheck;
 			if(obj == txtInfo[0]) { // 이름
 				// 소문자 : a-z / 대문자 : A-Z / 숫자 : 0-9 / 한글 : ㄱ-ㅎㅏ-ㅣ가-힣
-				boolean eng = Pattern.matches("^[a-zA-Z0-9]*$", txtInfo[0].getText());
-				if(!eng) {
-					JOptionPane.showMessageDialog(txtInfo[0], "영문자/숫자만 입력하세요", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+				// [] 안에있는거 사용
+				// {} 반복하기!
+				keyCheck = Pattern.matches("^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]*$", txtInfo[0].getText());
+				if(!keyCheck) {
+					JOptionPane.showMessageDialog(txtInfo[0], "문자만 입력하세요", "입력오류", JOptionPane.INFORMATION_MESSAGE);
 					txtInfo[0].setText("");
 				}
 			}
-			if(obj == txtInfo[1]) { // 생년월일
-				
+			if(obj == txtFInfo1[2]) {
+				keyCheck = Pattern.matches("^[0-9]*$", txtFInfo1[2].getText());
+				if(!keyCheck) {
+					JOptionPane.showMessageDialog(txtFInfo1[2], "숫자만 입력하세요\n예시 : 01011112222", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+					txtFInfo1[2].setText("");
+				}
 			}
-		}
+			if(obj == txtFInfo2[2]) {
+				keyCheck = Pattern.matches("^[0-9]*$", txtFInfo1[2].getText());
+				if(!keyCheck) {
+					JOptionPane.showMessageDialog(txtFInfo1[2], "숫자만 입력하세요\n예시 : 01011112222", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+					txtFInfo2[2].setText("");
+				}
+			}
+		}//keyReleased
 	}
 
 	// 텍스트필드 초기화
