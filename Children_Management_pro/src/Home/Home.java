@@ -571,7 +571,7 @@ public class Home extends JFrame implements ActionListener{
 		}
 		else if(obj == btnUpImg) {
 			System.out.println("이미지업로드");
-			JOptionPane.showMessageDialog(this, "접근불가 : 개발중입니다.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "접근불가 : 개발중입니다.", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		tableSet();
@@ -588,9 +588,9 @@ public class Home extends JFrame implements ActionListener{
 			if(cnt > 0)
 				JOptionPane.showMessageDialog(this, "정상적으로 삭제되었습니다", "success", JOptionPane.INFORMATION_MESSAGE);
 			else 
-				JOptionPane.showMessageDialog(this, "삭제 중 오류", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "삭제 중 오류", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}catch(ArrayIndexOutOfBoundsException e) {
-			JOptionPane.showMessageDialog(this, "접근불가 : 삭제할 행을 클릭하세요", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "접근불가 : 삭제할 행을 클릭하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
@@ -604,7 +604,7 @@ public class Home extends JFrame implements ActionListener{
 		try {
 			System.out.println(Integer.parseInt(txtSelcNo.getText()));
 		}catch(NumberFormatException e) {
-			JOptionPane.showMessageDialog(this, "접근불가 : 수정할 행을 클릭하세요", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "접근불가 : 수정할 행을 클릭하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
 			flag = false;
 			return;
 		}

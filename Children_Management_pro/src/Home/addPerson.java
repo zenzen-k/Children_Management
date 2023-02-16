@@ -361,7 +361,7 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 			System.out.println("SQL오류");
 		else {
 			System.out.println("insert 실패");
-			JOptionPane.showMessageDialog(this, "실패. 관리자에게 문의", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "실패. 관리자에게 문의", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -387,7 +387,7 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 			System.out.println("SQL오류");
 		else {
 			System.out.println("insert 실패");
-			JOptionPane.showMessageDialog(this, "실패. 관리자에게 문의", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "실패. 관리자에게 문의", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 
 	} //infoInsert
@@ -406,16 +406,16 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 		
 		// 클래스선택
 		if(indexC == 0) {
-			JOptionPane.showMessageDialog(this, "클래스를 선택하세요", "NoData", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "클래스를 선택하세요", "NoData", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		//가족관계선택
 		if(indexF1 == 0) {
-			JOptionPane.showMessageDialog(this, "가족관계1를 선택하세요", "NoData", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "가족관계1를 선택하세요", "NoData", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		if(indexF2 == 0) {
-			JOptionPane.showMessageDialog(this, "가족관계2를 선택하세요", "NoData", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "가족관계2를 선택하세요", "NoData", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		
@@ -423,55 +423,55 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 		// 정보입력검사
 		for(int i=0; i<txtInfo.length; i++) {
 			if(txtInfo[i].getText().length() == 0) {
-				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.PLAIN_MESSAGE);
 				return false;
 			} else if(txtInfo[i].getText().length() > checkInfo[i]) {
-				JOptionPane.showMessageDialog(this, fulldata, "FullData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, fulldata, "FullData", JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
 		}
 		//가족입력검사
 		for(int i=0; i<txtFInfo1.length; i++) {
 			if(txtFInfo1[i].getText().length() == 0) {
-				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.PLAIN_MESSAGE);
 				return false;
 			} else if(txtFInfo1[i].getText().length() > checkFInfo[i]) {
-				JOptionPane.showMessageDialog(this, fulldata2, "FullData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, fulldata2, "FullData", JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
 			if(txtFInfo2[i].getText().length() == 0) {
-				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.PLAIN_MESSAGE);
 				return false;
 			} else if(txtFInfo2[i].getText().length() > checkFInfo[i]) {
-				JOptionPane.showMessageDialog(this, fulldata2 , "FullData", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, fulldata2 , "FullData", JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
 		}
 		if(txtFInfo1[2].getText().length() != 11){
-			JOptionPane.showMessageDialog(this, dataError, "DataError", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, dataError, "DataError", JOptionPane.PLAIN_MESSAGE);
 			txtFInfo1[2].requestFocus();
 			return false;
 		}
 		if(txtFInfo2[2].getText().length() != 11){
-			JOptionPane.showMessageDialog(this, dataError, "DataError", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, dataError, "DataError", JOptionPane.PLAIN_MESSAGE);
 			txtFInfo2[2].requestFocus();
 			return false;
 		}
 		//날짜형식
 		if(!patnDate(txtInfo[1])) {
-			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		if(!patnDate(txtInfo[2])) {
-			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		if(!patnDate(txtFInfo1[1])) {
-			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		if(!patnDate(txtFInfo2[1])) {
-			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		else

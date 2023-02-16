@@ -167,7 +167,7 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 			txtId.requestFocus();
 			return false;
 		} else if(txtId.getText().length() > 20 || txtId.getText().length() < 6) {
-			JOptionPane.showMessageDialog(this, "ID는 6~20자 가능합니다", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "ID는 6~20자 가능합니다", "입력오류", JOptionPane.PLAIN_MESSAGE);
 			txtId.requestFocus();
 			return false;
 		}
@@ -178,7 +178,7 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 			txtPw.requestFocus();
 			return false;
 		} else if(txtPw.getText().length() > 16 || txtPw.getText().length() < 8) {
-			JOptionPane.showMessageDialog(this, "PW는 8~16자 가능합니다", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "PW는 8~16자 가능합니다", "입력오류", JOptionPane.PLAIN_MESSAGE);
 			txtPw.requestFocus();
 			return false;
 		}
@@ -189,7 +189,7 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 			txtName.requestFocus();
 			return false;
 		} else if(txtName.getText().length() > 10) {
-			JOptionPane.showMessageDialog(this, "이름은 10글자까지 가능합니다", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "이름은 10글자까지 가능합니다", "입력오류", JOptionPane.PLAIN_MESSAGE);
 			txtName.requestFocus();
 			return false;
 		}
@@ -289,21 +289,21 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 				// 소문자 : a-z / 대문자 : A-Z / 숫자 : 0-9 / 한글 : ㄱ-ㅎㅏ-ㅣ가-힣
 				boolean eng = Pattern.matches("^[a-zA-Z0-9]*$", txtId.getText());
 				if(!eng) {
-					JOptionPane.showMessageDialog(txtId, "영문자/숫자만 입력하세요", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(txtId, "영문자/숫자만 입력하세요", "입력오류", JOptionPane.PLAIN_MESSAGE);
 					txtId.setText("");
 				}
 			}
 			if(obj == txtPw) {
 				boolean eng = Pattern.matches("^[a-zA-Z0-9]*$", txtPw.getText());
 				if(!eng) {
-					JOptionPane.showMessageDialog(txtPw, "영문자/숫자만 입력하세요", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(txtPw, "영문자/숫자만 입력하세요", "입력오류", JOptionPane.PLAIN_MESSAGE);
 					txtPw.setText("");
 				}
 			}
 			if(obj == txtName) {
 				boolean koreng = Pattern.matches("^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z]*$", txtName.getText());
 				if(!koreng) {
-					JOptionPane.showMessageDialog(txtName, "한글/영문자만 입력하세요", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(txtName, "한글/영문자만 입력하세요", "입력오류", JOptionPane.PLAIN_MESSAGE);
 					txtName.setText("");
 				}
 			}
@@ -311,7 +311,7 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 				try {
 					Integer.parseInt(txtPhone.getText());
 				} catch (NumberFormatException nfe) { 
-					JOptionPane.showMessageDialog(txtPhone, "-없이 숫자만 입력하세요\n", "입력오류", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(txtPhone, "-없이 숫자만 입력하세요\n", "입력오류", JOptionPane.PLAIN_MESSAGE);
 					txtPhone.setText(""); 
 					txtPhone.requestFocus(); 
 				}

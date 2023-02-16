@@ -132,7 +132,7 @@ public class LoginMain extends JFrame implements ActionListener{
 			if(cnt == 0) {
 				messege = "아이디와 패스워드를 확인해주세요";
 				tit = "login 실패";
-				JOptionPane.showMessageDialog(this, messege, tit, JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, messege, tit, JOptionPane.ERROR_MESSAGE);
 				// 실패시 아이디와 비밀번호 초기화
 				txtId.setText("");
 				txtPw.setText("");
