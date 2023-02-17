@@ -73,7 +73,7 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 	int c_noChoice = 0; // 선택한 항목의 c_no를 저장하는 변수
 	int indexF1 = 0; // 초이스에서 선택한 인덱스를 받아옴 (family1)
 	String fam1Choice = null; // 선택한 항목의 문자열을 저장하는 변수
-	int indexF2 = 0; // 초이스에서 선택한 인덱스를 받아옴 (family1)
+	int indexF2 = 0; // 초이스에서 선택한 인덱스를 받아옴 (family2)
 	String fam2Choice = null; // 선택한 항목의 문자열을 저장하는 변수
 	String gen = null;
 
@@ -330,38 +330,63 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 	private void finfoInsert(int no) {
 		FamilyBean fb1 = new FamilyBean();
 		FamilyBean fb2 = new FamilyBean();
+		int cnt1 ;
+		int cnt2 ;
+		
 		fb1.setP_no(no);
 		fb1.setF_relations(fam1Choice);
 		fb1.setF_name(txtFInfo1[0].getText());
 		fb1.setF_birth(txtFInfo1[1].getText());
 		fb1.setF_phone(txtFInfo1[2].getText());
+		cnt1 = fdao.finfoInsert(fb1);
 
-		fb2.setP_no(no);
-		fb2.setF_relations(fam2Choice);
-		fb2.setF_name(txtFInfo2[0].getText());
-		fb2.setF_birth(txtFInfo2[1].getText());
-		fb2.setF_phone(txtFInfo2[2].getText());
-
-		int cnt1 = fdao.finfoInsert(fb1);
-		int cnt2 = fdao.finfoInsert(fb2);
-		System.out.println("cnt1 : " + cnt1);
-		System.out.println("cnt2 : " + cnt2);
-		if(cnt1 > 0 && cnt2 > 0) {
-			System.out.println("Family insert 성공");
-			int result = JOptionPane.showConfirmDialog
-					(this, "등록완료. 더 등록하시겠습니까?", "success",JOptionPane.YES_NO_OPTION);
-			if(result == 1) {
-				close();
-				dispose();
+		if(!txtFInfo2[0].getText().equals("")) {
+			fb2.setP_no(no);
+			fb2.setF_relations(fam2Choice);
+			fb2.setF_name(txtFInfo2[0].getText());
+			fb2.setF_birth(txtFInfo2[1].getText());
+			fb2.setF_phone(txtFInfo2[2].getText());
+			cnt2 = fdao.finfoInsert(fb2);
+			
+			System.out.println("cnt1 : " + cnt1);
+			System.out.println("cnt2 : " + cnt2);
+			if(cnt1 > 0 && cnt2 > 0) {
+				System.out.println("Family insert 성공");
+				int result = JOptionPane.showConfirmDialog
+						(this, "등록완료. 더 등록하시겠습니까?", "success",JOptionPane.YES_NO_OPTION);
+				if(result == 1) {
+					close();
+					dispose();
+				}
+				else
+					clearTextField();	
 			}
-			else
-				clearTextField();	
+			else if(cnt1 == 0 || cnt2 == 0) 
+				System.out.println("SQL오류");
+			else {
+				System.out.println("insert 실패");
+				JOptionPane.showMessageDialog(this, "실패. 관리자에게 문의", "ERROR", JOptionPane.ERROR_MESSAGE);
+			}
 		}
-		else if(cnt1 == 0 || cnt2 == 0) 
-			System.out.println("SQL오류");
 		else {
-			System.out.println("insert 실패");
-			JOptionPane.showMessageDialog(this, "실패. 관리자에게 문의", "ERROR", JOptionPane.ERROR_MESSAGE);
+			System.out.println("cnt1 : " + cnt1);
+			if(cnt1 > 0) {
+				System.out.println("Family insert 성공");
+				int result = JOptionPane.showConfirmDialog
+						(this, "등록완료. 더 등록하시겠습니까?", "success",JOptionPane.YES_NO_OPTION);
+				if(result == 1) {
+					close();
+					dispose();
+				}
+				else
+					clearTextField();	
+			}
+			else if(cnt1 == 0) 
+				System.out.println("SQL오류");
+			else {
+				System.out.println("insert 실패");
+				JOptionPane.showMessageDialog(this, "실패. 관리자에게 문의", "ERROR", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
@@ -409,15 +434,15 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 			JOptionPane.showMessageDialog(this, "클래스를 선택하세요", "NoData", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
-		//가족관계선택
+		//가족관계선택 - 가족은 1명이상만 등록하면 됨.
 		if(indexF1 == 0) {
 			JOptionPane.showMessageDialog(this, "가족관계1를 선택하세요", "NoData", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
-		if(indexF2 == 0) {
-			JOptionPane.showMessageDialog(this, "가족관계2를 선택하세요", "NoData", JOptionPane.PLAIN_MESSAGE);
-			return false;
-		}
+//		if(indexF2 == 0) {
+//			JOptionPane.showMessageDialog(this, "가족관계2를 선택하세요", "NoData", JOptionPane.PLAIN_MESSAGE);
+//			return false;
+//		}
 		
 		
 		// 정보입력검사
@@ -439,10 +464,11 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 				JOptionPane.showMessageDialog(this, fulldata2, "FullData", JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
-			if(txtFInfo2[i].getText().length() == 0) {
-				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.PLAIN_MESSAGE);
-				return false;
-			} else if(txtFInfo2[i].getText().length() > checkFInfo[i]) {
+//			if(txtFInfo2[i].getText().length() == 0) {
+//				JOptionPane.showMessageDialog(this, noData, "NoData", JOptionPane.PLAIN_MESSAGE);
+//				return false;
+//			} 
+			if(txtFInfo2[i].getText().length() > checkFInfo[i]) {
 				JOptionPane.showMessageDialog(this, fulldata2 , "FullData", JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
@@ -452,7 +478,8 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 			txtFInfo1[2].requestFocus();
 			return false;
 		}
-		if(txtFInfo2[2].getText().length() != 11){
+		// 데이터가 있으면 11자 이상
+		if(txtFInfo2[2].getText().length() != 11 && txtFInfo2[2].getText().length() > 0){
 			JOptionPane.showMessageDialog(this, dataError, "DataError", JOptionPane.PLAIN_MESSAGE);
 			txtFInfo2[2].requestFocus();
 			return false;
@@ -470,7 +497,7 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
-		if(!patnDate(txtFInfo2[1])) {
+		if(!patnDate(txtFInfo2[1]) && txtFInfo2[2].getText().length() > 0) {
 			JOptionPane.showMessageDialog(this, formatError, "FormatError", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}

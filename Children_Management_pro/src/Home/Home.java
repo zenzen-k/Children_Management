@@ -94,7 +94,7 @@ public class Home extends JFrame implements ActionListener{
 	/* 이벤트 관리 */
 	private void setevent() {
 		System.out.println("setevent");
-		
+
 		// 완전종료!
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -158,7 +158,7 @@ public class Home extends JFrame implements ActionListener{
 		btnFilter = new JButton("필터");
 		btnSort = new JButton("정렬");
 		btnDelete = new JButton("삭제");
-		
+
 		int n = 300;
 		txtSelcName.setBounds(60, 20, 100, 25);
 		btnSelect.setBounds(0, 20, 60, 25);
@@ -193,7 +193,7 @@ public class Home extends JFrame implements ActionListener{
 	/* 메인화면 구상 - 오른쪽*/
 	private void Rcompose() {
 		System.out.println("Rcompose");
-		
+
 		Container contentPane = getContentPane();
 		contentPane.setLayout(null);
 
@@ -211,7 +211,7 @@ public class Home extends JFrame implements ActionListener{
 		btnInfo.setBounds(0,20,120,25);
 		pnRight.add(btnInfo);
 		btnInfo.setEnabled(false); // 라벨대신써봤움 나중에 기능넣고싶으면 변경하기
-		
+
 		// 학번 수정불간ㅇ
 		txtSelcNo.setBounds(150,20,120,25);
 		txtSelcNo.setEditable(false);
@@ -364,7 +364,7 @@ public class Home extends JFrame implements ActionListener{
 	/* 가져온 데이터 rowData에넣기 */
 	private void dataInput() {
 		System.out.println("dataInput");
-		
+
 		Object[] arr = jlists.toArray(); // 배열로변환
 		System.out.println("arr : " + arr.length);
 		int j=0, x=1; // x 순번
@@ -386,7 +386,7 @@ public class Home extends JFrame implements ActionListener{
 	// 이미지아이콘을 이미지로 바꿔주고 사이즈조정한뒤 다시 아이콘으로 변경해야한다.
 	private ImageIcon imgsize() {
 		System.out.println("imgsize");
-		
+
 		ImageIcon icon = new ImageIcon("image/0.png");
 		Image img = icon.getImage();
 		Image imgsize = img.getScaledInstance(150, 200, Image.SCALE_SMOOTH); // 사이즈조정해주기!
@@ -399,7 +399,7 @@ public class Home extends JFrame implements ActionListener{
 	/* 테이블데이터 불러오는 메서드 */
 	private void getJoinTable() {
 		System.out.println("getJoinTable");
-		
+
 		// 생성자에서 했던 것과 동일한
 		jlists = jdao.getJoinTable();
 		rowData = new Object[jlists.size()][columnName.length];
@@ -430,13 +430,13 @@ public class Home extends JFrame implements ActionListener{
 		}
 		else {
 			System.out.println(jlists.size());
-			
+
 			rowData = new Object[jlists.size()][columnName.length];
 			dataInput();
 			table = new JTable(rowData, columnName); // rowData의 값을 table에 올린다.
 			scrollPane.setViewportView(table);
 			tableSet();
-			
+
 			table.addMouseListener(new MouseHandler());
 		}
 	} // getJoinTable
@@ -456,18 +456,21 @@ public class Home extends JFrame implements ActionListener{
 		}
 	} // clearTxtInfo
 
-	// 연락처 폼
+	// 연락처 폼 -> 이렇게도 할 수 있고, Pattern.matches 를 사용 가능하다! addPerson클래스 참고
 	private String phoneFormat(String phone) {
 		StringBuffer buf = new StringBuffer(phone);
-		buf.insert(3, "-");
-		buf.insert(8, "-");
-		String rePhone = buf.toString();
-		return rePhone;
+		if(phone.contains("-")) {
+			buf.insert(3, "-");
+			buf.insert(8, "-");
+			String rePhone = buf.toString();
+			return rePhone;
+		}
+		return phone;
 	} // phoneFormat
 
 	public void mouseInfo(int p_no) {
 		System.out.println("mouseInfo");
-		
+
 		pdao = new PersonDao();
 		ArrayList<JoinBean> lists = pdao.getAllInfo(p_no);
 
@@ -481,7 +484,7 @@ public class Home extends JFrame implements ActionListener{
 		txtAddr.setText(lists.get(0).getAddr());
 		txtNote.setText(lists.get(0).getP_note());
 		txtSelcNo.setText(String.valueOf(lists.get(0).getP_no()));
-		
+
 		fdao = new FamilyDao();
 		ArrayList<FamilyBean> flists = fdao.getAllFam(p_no);
 
@@ -536,12 +539,12 @@ public class Home extends JFrame implements ActionListener{
 		else if(obj == btnSelect) { // 검색
 			System.out.println("검색");
 			String selcName = txtSelcName.getText();
-			if(selcName.equals("")) {
-				getJoinTable(); // 아무것도 없으면 전체조회하기
-				//JOptionPane.showMessageDialog(this, "검색할 이름을 입력하세요", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+			if(!selcName.equals("")) {
+				getSearch(selcName);
 			}
 			else {
-				getSearch(selcName);
+				getJoinTable(); // 아무것도 없으면 전체조회하기
+				//JOptionPane.showMessageDialog(this, "검색할 이름을 입력하세요", "ERROR", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 		else if(obj == btnDelete) { // 삭제
@@ -556,7 +559,8 @@ public class Home extends JFrame implements ActionListener{
 		}
 		else if(obj == btnSort) { // 정렬
 			System.out.println("정렬");
-			
+			//new SortPerson();
+			getJoinTable();
 		}
 		else if(obj == btnFilter) {
 			System.out.println("필터");
@@ -564,18 +568,18 @@ public class Home extends JFrame implements ActionListener{
 		}
 		else if(obj == btnUpdate) { // 수정버튼
 			System.out.println("수정");
-			
+
 			flag = !flag;
-			InfoUpdate();
+			personUpdate();
 			getJoinTable();
 		}
 		else if(obj == btnUpImg) {
 			System.out.println("이미지업로드");
-			JOptionPane.showMessageDialog(this, "접근불가 : 개발중입니다.", "ERROR", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "접근불가 : 준비중입니다.", "No Access", JOptionPane.ERROR_MESSAGE);
 		}
-		
 		tableSet();
 	} //actionPerformed
+
 
 	private void personDelete() {
 		// 행을 클릭 안하고 삭제 버튼 눌렀을 때
@@ -593,12 +597,12 @@ public class Home extends JFrame implements ActionListener{
 			JOptionPane.showMessageDialog(this, "접근불가 : 삭제할 행을 클릭하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
+
 	} // personDelete
 
 	// 수정메서드
-	private void InfoUpdate() {
-		System.out.println("InfoUpdate");
+	private void personUpdate() {
+		System.out.println("personUpdate");
 		System.out.println(flag);
 		// 행을 클릭 안하고 수정버튼 눌렀을 때
 		try {
@@ -611,7 +615,7 @@ public class Home extends JFrame implements ActionListener{
 
 		if(flag == true) { // 클릭을 했을 때 수정가능상태로 바뀜
 			System.out.println("수정가능");
-			
+
 			txtAddr.setEditable(true);
 			txtNote.setEditable(true);
 			for (int i = 0; i < txtFName.length; i++) {
@@ -619,7 +623,7 @@ public class Home extends JFrame implements ActionListener{
 				txtFbirth[i].setEditable(true);
 				txtPhone[i].setEditable(true);
 			}
-			
+
 			// 수정할때 번호의 - 삭제
 			String phoneNum = txtPhone[0].getText();
 			String phoneNum2 = txtPhone[1].getText();
@@ -627,11 +631,11 @@ public class Home extends JFrame implements ActionListener{
 				txtPhone[0].setText(phoneNum.replace("-",""));
 				txtPhone[1].setText(phoneNum2.replace("-",""));
 			}
-			
+
 		} 
 		else if(flag == false) { // 수정불가능상태로 바뀜 + 텍스트에 있는 데이터 보내깅
 			System.out.println("수정불가능");
-			
+
 			FamilyBean[] list = new FamilyBean[2]; // 2칸
 			PersonBean pb = new PersonBean();
 
@@ -664,20 +668,19 @@ public class Home extends JFrame implements ActionListener{
 				phoneFormat(txtPhone[i].getText());
 			}
 			int fcnt = fdao.InfoUpdate(list);
-			
 		}
 	} // InfoUpdate
 
 	private void tableSet() {
 		System.out.println("tableSet");
-		
+
 		// 테이블 컬럼별 길이 설정
 		// 해보니까 가로길이를 설정해놨기 때문에 필요한것만 조정하면 나머지는 남은 너비에서 알아서 자동조정되는듯!
 		table.getColumn("NO").setPreferredWidth(30);
 		table.getColumn("연령(만)").setPreferredWidth(60);
 		table.getColumn("생년월일").setPreferredWidth(100);
 		table.getColumn("입학일").setPreferredWidth(100);
-	}
+	} // 
 
 	//test
 	public static void main(String[] args) {

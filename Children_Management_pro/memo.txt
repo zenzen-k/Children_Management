@@ -18,9 +18,7 @@ select t_name, c_name, e_name from (select t_name, c_name, emp_no
 from teacher, classroom where teacher.c_no = classroom.c_no and t_id = 'sys') natural join emp;
 
 
--> 수정버튼누르면활성화하게끔하면될듯 ㅎ
-txtId.setText("0"); // 기본값으로 0을 넣음
-txtId.setEnabled(false); // 입력할 수 없게 함
+
 
 
 ---
