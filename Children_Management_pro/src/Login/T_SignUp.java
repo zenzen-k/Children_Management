@@ -140,7 +140,7 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 		for(ClassroomBean cb : lists) {
 			cClass.add(cb.getName());
 		}
-		// 직급 데이터 추가
+		// 직급 데이터 추가 
 		ArrayList<EmpBean> lists2 = eDao.setClassChoice();
 		for(EmpBean eb : lists2) {
 			cEmp.add(eb.getName());

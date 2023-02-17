@@ -1,6 +1,7 @@
 package Home;
 
 import java.awt.BorderLayout;
+import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -10,6 +11,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -49,11 +52,13 @@ public class Home extends JFrame implements ActionListener{
 	Font font = new Font("나눔스퀘어 네오 Regular", Font.PLAIN, 13);
 	Font fontBold = new Font("나눔스퀘어 네오 Regular", Font.BOLD, 13);
 	boolean flag = false;
+	int row; //선택 행번호
 
 	// 정의
 	PersonDao pdao = null;
 	JoinDao jdao = null;
 	FamilyDao fdao = null;
+	ClassroomDao cdao = null;
 	ArrayList<JoinBean> jlists = null;
 	String loginInfo;
 
@@ -399,7 +404,7 @@ public class Home extends JFrame implements ActionListener{
 	/* 테이블데이터 불러오는 메서드 */
 	private void getJoinTable() {
 		System.out.println("getJoinTable");
-
+		
 		// 생성자에서 했던 것과 동일한
 		jlists = jdao.getJoinTable();
 		rowData = new Object[jlists.size()][columnName.length];
@@ -503,7 +508,7 @@ public class Home extends JFrame implements ActionListener{
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("mouse");
 			clearTxtInfo();
-			int row = table.getSelectedRow();
+			row = table.getSelectedRow();
 			// 선택한 행의 학생번호를 가지고 mouseInfo를 호출한다.
 			int no = (int)table.getValueAt(row, 1);
 			mouseInfo(no);
@@ -559,12 +564,11 @@ public class Home extends JFrame implements ActionListener{
 		}
 		else if(obj == btnSort) { // 정렬
 			System.out.println("정렬");
-			//new SortPerson();
-			getJoinTable();
+			sortPerson();
 		}
 		else if(obj == btnFilter) {
 			System.out.println("필터");
-
+			filterPerson();
 		}
 		else if(obj == btnUpdate) { // 수정버튼
 			System.out.println("수정");
@@ -577,15 +581,84 @@ public class Home extends JFrame implements ActionListener{
 			System.out.println("이미지업로드");
 			JOptionPane.showMessageDialog(this, "접근불가 : 준비중입니다.", "No Access", JOptionPane.ERROR_MESSAGE);
 		}
+
+
 		tableSet();
 	} //actionPerformed
-
-
-	private void personDelete() {
-		// 행을 클릭 안하고 삭제 버튼 눌렀을 때
+	
+	// 필터
+	private void filterPerson() {
+		//반이름
+		cdao = new ClassroomDao();
+		ArrayList<ClassroomBean> lists = cdao.setClassChoice();
+		String[] a = new String[lists.size()];
+		int i = 0;
+		for(ClassroomBean cb : lists) {
+			a[i++] = cb.getName();
+		}
+		//조회할거
+		String str = JOptionPane.showInputDialog("조회하실 교실을 선택하세요\n1:"+a[0]+" 2:"+a[1] +" 3:"+a[2] +" 4:"+a[3]);
+		if(str == null) {
+			return;
+		}
 		try {
-			int row = table.getSelectedRow();
+			int num = Integer.parseInt(str);
+			jlists = jdao.cNameJoin(num);
+			rowData = new Object[jlists.size()][columnName.length];
+			dataInput();
+			table = new JTable(rowData, columnName); 
+			scrollPane.setViewportView(table);
+			tableSet();
+		}catch(NumberFormatException e) {
+			JOptionPane.showMessageDialog(this, "잘못된 값입니다. 보기의 숫자만 입력하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
+		}
+	}
 
+	//정렬
+	private void sortPerson() {
+		try {
+			String str = JOptionPane.showInputDialog("정렬 기준을 선택하세요\n1:이름 2:입학일 3:교실");
+			if(str == null) {
+				return;
+			}
+			int num = Integer.parseInt(str);
+			String[] arr = new String[2];
+			switch(num) {
+			case 1: arr[0] = "p_name"; break;
+			case 2: arr[0] = "p_entran"; break;
+			case 3: arr[0] = "c_name"; break;
+			default : JOptionPane.showMessageDialog(this, "잘못된 값입니다. 보기의 숫자만 입력하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
+			}
+			
+			String str2 = JOptionPane.showInputDialog("정렬 방식을 선택하세요\n1:내림차순 2:오름차순");
+			if(str2 == null) {
+				return;
+			}
+			num = Integer.parseInt(str2);
+			switch(num) {
+			case 1: arr[1] = "desc"; break;
+			case 2: arr[1] = "asc"; break;
+			default : JOptionPane.showMessageDialog(this, "잘못된 값입니다. 보기의 숫자만 입력하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
+			}
+
+			System.out.println(arr[0] + " " + arr[1]);
+			jlists = jdao.sortJoin(arr);
+			rowData = new Object[jlists.size()][columnName.length];
+			dataInput();
+			table = new JTable(rowData, columnName);
+			scrollPane.setViewportView(table);
+			tableSet();
+
+		} catch(NumberFormatException e) {
+			JOptionPane.showMessageDialog(this, "잘못된 값입니다. 보기의 숫자만 입력하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
+			sortPerson();
+		}
+	}
+
+	//삭제
+	private void personDelete() {
+		try {
+			row = table.getSelectedRow();
 			int p_no = (int)table.getValueAt(row, 1);
 			int cnt = pdao.personDelete(p_no);
 			System.out.println("delete cnt : " + cnt);
@@ -681,6 +754,7 @@ public class Home extends JFrame implements ActionListener{
 		table.getColumn("생년월일").setPreferredWidth(100);
 		table.getColumn("입학일").setPreferredWidth(100);
 	} // 
+
 
 	//test
 	public static void main(String[] args) {

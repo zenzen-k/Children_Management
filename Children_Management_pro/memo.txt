@@ -42,3 +42,11 @@ order by p_name asc, p_birth asc;
 
 
 update family set f_name = ? , f_birth = ?, f_phone = ? where p_no = ? and f_relations = ?;
+
+
+---
+
+
+select p_no, p_name, p_birth, p_entran, c_name, c_age, t_name 
+from (select * from person natural join classroom order by p_name asc, p_birth asc) 
+natural join teacher order by p_name desc;
