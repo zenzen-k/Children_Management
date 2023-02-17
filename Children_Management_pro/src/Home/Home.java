@@ -393,6 +393,11 @@ public class Home extends JFrame implements ActionListener{
 		btnPhysical.setEnabled(false);
 		btnPhysical.setFont(font);
 		
+		btnUpdate = new JButton("수정");
+		btnUpdate.setBounds(585, 0, 60, 25);
+		pnPhysical.add(btnUpdate);
+		btnUpdate.setFont(font);
+		
 		//내용
 		JPanel pbPhyTitle = new JPanel();
 		pbPhyTitle.setBounds(0, 30, 650, 25);
