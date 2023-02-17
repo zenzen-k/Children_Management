@@ -130,11 +130,12 @@ drop table physicalDev;
 create table physicalDev(
 	p_no number references person(p_no) on delete cascade, -- person(p_no)의 자식테이블
 	pd_age varchar2(15) not null,
+	pd_date date,
 	weight decimal(5,2),
 	height decimal(5,2)
 );
 
-insert into physicalDev values(220212, '3세 1학기', 18.5 ,100.07);
+insert into physicalDev values(220212, '3세 1학기', '2023-02-17' ,18.5 ,100.07);
 select * from physicalDev;
 commit;
 

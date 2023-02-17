@@ -36,8 +36,6 @@ public class Home extends JFrame implements ActionListener{
 	JLabel imgLabel = new JLabel(""); // 이미지
 	JTextField txtSelcNo = new JTextField();
 	JTextField txtSelcName = new JTextField();
-	//	JTextField txtName = new JTextField(), txtGender = new JTextField(), txtClass = new JTextField(), 
-	//			txtBirth = new JTextField(), txtEntran = new JTextField(), txtTeacher = new JTextField();
 	JTextField[] txtInfo = new JTextField[6];
 	JTextField txtAddr = new JTextField();
 	JTextField txtNote = new JTextField();
@@ -49,6 +47,11 @@ public class Home extends JFrame implements ActionListener{
 	JLabel lbHome;
 	JLabel lbCheck;
 
+	//신체
+	JLabel[] lbAge = new JLabel[6];
+	JLabel[] lbTitle = new JLabel[4]; 
+	JTextField[][] txtPhysical = new JTextField[6][3];
+	
 	Font font = new Font("나눔스퀘어 네오 Regular", Font.PLAIN, 13);
 	Font fontBold = new Font("나눔스퀘어 네오 Regular", Font.BOLD, 13);
 	boolean flag = false;
@@ -84,6 +87,7 @@ public class Home extends JFrame implements ActionListener{
 		tableSet();
 		Lcompose();
 		Rcompose();
+		Pcompose();
 
 		//이벤트
 		setevent();
@@ -205,7 +209,7 @@ public class Home extends JFrame implements ActionListener{
 		// 우측 패널 설정
 		JPanel pnRight = new JPanel();
 		pnRight.setLayout(null);
-		pnRight.setBounds(600, 50, 650, 690);
+		pnRight.setBounds(600, 50, 650, 280);
 		contentPane.add(pnRight);
 		//pnRight.setBackground(Color.pink);
 
@@ -232,7 +236,7 @@ public class Home extends JFrame implements ActionListener{
 		JPanel jpnInfo = new JPanel();
 		jpnInfo.setBounds(150, 60, 500, 50);
 		jpnInfo.setLayout(new GridLayout(2,6));
-		//		jpnInfo.setBackground(Color.pink);
+		//jpnInfo.setBackground(Color.pink);
 		pnRight.add(jpnInfo);
 
 		//라벨에 박스그어주깅
@@ -275,7 +279,7 @@ public class Home extends JFrame implements ActionListener{
 		JPanel jpnInfo2 = new JPanel();
 		jpnInfo2.setBounds(233, 135, 416, 100);
 		jpnInfo2.setLayout(new GridLayout(4,3));
-		//		jpnInfo.setBackground(Color.pink);
+		//jpnInfo.setBackground(Color.pink);
 		pnRight.add(jpnInfo2);
 
 		JLabel lbFR = new JLabel("관계");
@@ -364,8 +368,77 @@ public class Home extends JFrame implements ActionListener{
 		btnUpdate.addActionListener(this);
 		btnUpImg.addActionListener(this);
 		btnDelete.addActionListener(this);
+		
 	} //Rcompose()
+	
+	/* 메인화면 구상 - 신체정보*/
+	private void Pcompose() {
+		System.out.println("Pcompose");
+		LineBorder lB = new LineBorder(Color.gray, 1, true);
+		Container contentPane = getContentPane();
+		contentPane.setLayout(null);
+		
+		JPanel pnPhysical = new JPanel();
+		pnPhysical.setLayout(null);
+		pnPhysical.setBounds(600, 335, 650, 200);
+		contentPane.add(pnPhysical);
+//		pnPhysical.setBackground(Color.pink);
 
+		//신체발달
+		JButton btnPhysical = new JButton("신체발달");
+		btnPhysical.setBackground(Color.darkGray);
+		btnPhysical.setForeground(Color.white);
+		btnPhysical.setBounds(0,0,120,25);
+		pnPhysical.add(btnPhysical);
+		btnPhysical.setEnabled(false);
+		btnPhysical.setFont(font);
+		
+		//내용
+		JPanel pbPhyTitle = new JPanel();
+		pbPhyTitle.setBounds(0, 30, 650, 25);
+		pbPhyTitle.setLayout(new GridLayout());
+		pnPhysical.add(pbPhyTitle);
+//		pbPhyTitle.setBackground(Color.pink);
+		
+		lbTitle[0] = new JLabel("연령");
+		lbTitle[1] = new JLabel("검사일자");
+		lbTitle[2] = new JLabel("몸무게");
+		lbTitle[3] = new JLabel("키");
+		
+
+		int i=0;
+		for(i=0; i<lbTitle.length; i++) {
+			lbTitle[i].setFont(font);
+			lbTitle[i].setBorder(lB);
+			pbPhyTitle.add(lbTitle[i]);
+		}
+		
+		JPanel pbPhyData = new JPanel();
+		pbPhyData.setBounds(0, 55, 650, 150);
+		pbPhyData.setLayout(new GridLayout(6,4));
+		pnPhysical.add(pbPhyData);
+//		pbPhyData.setBackground(Color.pink);
+		
+		lbAge[0] = new JLabel("만 3세 1학기");
+		lbAge[1] = new JLabel("만 3세 1학기");
+		lbAge[2] = new JLabel("만 3세 1학기");
+		lbAge[3] = new JLabel("만 3세 1학기");
+		lbAge[4] = new JLabel("만 3세 1학기");
+		lbAge[5] = new JLabel("만 3세 1학기");
+		
+		for(i=0; i<lbAge.length; i++) {
+			lbAge[i].setFont(font);
+			lbAge[i].setBorder(lB);
+			pbPhyData.add(lbAge[i]);
+			for(int j=0; j<txtPhysical[i].length; j++) {
+				txtPhysical[i][j] = new JTextField();
+				txtPhysical[i][j].setFont(font);
+				pbPhyData.add(txtPhysical[i][j]);
+				System.out.println(i + " " + j);
+			}
+		}
+	} //Pcompose()
+	
 	/* 가져온 데이터 rowData에넣기 */
 	private void dataInput() {
 		System.out.println("dataInput");
@@ -421,7 +494,6 @@ public class Home extends JFrame implements ActionListener{
 		return lists;
 	} // getTeacher
 
-
 	/* 검색 데이터 불러오는 메서드 */
 	private void getSearch(String name) {
 		System.out.println("getSearch");
@@ -446,7 +518,7 @@ public class Home extends JFrame implements ActionListener{
 		}
 	} // getJoinTable
 
-	// 인적사항 클리어
+	/* 인적사항 초기화 */
 	private void clearTxtInfo() {
 		for(int i =0; i< txtInfo.length; i++) {
 			txtInfo[i].setText("");
@@ -473,37 +545,7 @@ public class Home extends JFrame implements ActionListener{
 		return phone;
 	} // phoneFormat
 
-	public void mouseInfo(int p_no) {
-		System.out.println("mouseInfo");
-
-		pdao = new PersonDao();
-		ArrayList<JoinBean> lists = pdao.getAllInfo(p_no);
-
-		int i =0;
-		txtInfo[i++].setText(lists.get(0).getP_name());
-		txtInfo[i++].setText(lists.get(0).getGender());
-		txtInfo[i++].setText(lists.get(0).getC_name());
-		txtInfo[i++].setText(lists.get(0).getP_birth());
-		txtInfo[i++].setText(lists.get(0).getP_entran());
-		txtInfo[i++].setText(lists.get(0).getT_name());
-		txtAddr.setText(lists.get(0).getAddr());
-		txtNote.setText(lists.get(0).getP_note());
-		txtSelcNo.setText(String.valueOf(lists.get(0).getP_no()));
-
-		fdao = new FamilyDao();
-		ArrayList<FamilyBean> flists = fdao.getAllFam(p_no);
-
-		i = 0;
-		for(FamilyBean x : flists) {
-			txtFR[i].setText(x.getF_relations());
-			txtFName[i].setText(x.getF_name());
-			txtFbirth[i].setText(x.getF_birth());
-			txtPhone[i].setText(phoneFormat(x.getF_phone()));
-			i++;
-		}
-	} // mouseInfo
-
-
+	/* 마우스 이벤트 처리*/
 	class MouseHandler extends MouseAdapter{
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("mouse");
@@ -512,11 +554,47 @@ public class Home extends JFrame implements ActionListener{
 			// 선택한 행의 학생번호를 가지고 mouseInfo를 호출한다.
 			int no = (int)table.getValueAt(row, 1);
 			mouseInfo(no);
+			mousePhysical(no);
 		} // mouseClicked
+		
+		/* 클릭한 정보를 토대로 우측 신체발달 텍스트 필드에 추가 */
+		private void mousePhysical(int no) {
+			System.out.println("mousePhysical");
+		}
+		
+		/* 클릭한 정보를 토대로 우측 인적사항 텍스트 필드에 추가 */
+		public void mouseInfo(int p_no) {
+			System.out.println("mouseInfo");
+
+			pdao = new PersonDao();
+			ArrayList<JoinBean> lists = pdao.getAllInfo(p_no);
+
+			int i =0;
+			txtInfo[i++].setText(lists.get(0).getP_name());
+			txtInfo[i++].setText(lists.get(0).getGender());
+			txtInfo[i++].setText(lists.get(0).getC_name());
+			txtInfo[i++].setText(lists.get(0).getP_birth());
+			txtInfo[i++].setText(lists.get(0).getP_entran());
+			txtInfo[i++].setText(lists.get(0).getT_name());
+			txtAddr.setText(lists.get(0).getAddr());
+			txtNote.setText(lists.get(0).getP_note());
+			txtSelcNo.setText(String.valueOf(lists.get(0).getP_no()));
+
+			fdao = new FamilyDao();
+			ArrayList<FamilyBean> flists = fdao.getAllFam(p_no);
+
+			i = 0;
+			for(FamilyBean x : flists) {
+				txtFR[i].setText(x.getF_relations());
+				txtFName[i].setText(x.getF_name());
+				txtFbirth[i].setText(x.getF_birth());
+				txtPhone[i].setText(phoneFormat(x.getF_phone()));
+				i++;
+			}
+		} // mouseInfo
 	} // MouseHandler
 
-
-	// 액션이벤트
+	/* 액션 이벤트 처리 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("actionPerformed");
@@ -586,7 +664,7 @@ public class Home extends JFrame implements ActionListener{
 		tableSet();
 	} //actionPerformed
 	
-	// 필터
+	/* 필터 기능 */
 	private void filterPerson() {
 		//반이름
 		cdao = new ClassroomDao();
@@ -597,7 +675,7 @@ public class Home extends JFrame implements ActionListener{
 			a[i++] = cb.getName();
 		}
 		//조회할거
-		String str = JOptionPane.showInputDialog("조회하실 교실을 선택하세요\n1:"+a[0]+" 2:"+a[1] +" 3:"+a[2] +" 4:"+a[3]);
+		String str = JOptionPane.showInputDialog("조회할 교실을 선택하세요\n1:"+a[0]+" 2:"+a[1] +" 3:"+a[2] +" 4:"+a[3]);
 		if(str == null) {
 			return;
 		}
@@ -614,7 +692,7 @@ public class Home extends JFrame implements ActionListener{
 		}
 	}
 
-	//정렬
+	/* 정렬 기능 */
 	private void sortPerson() {
 		try {
 			String str = JOptionPane.showInputDialog("정렬 기준을 선택하세요\n1:이름 2:입학일 3:교실");
@@ -655,7 +733,7 @@ public class Home extends JFrame implements ActionListener{
 		}
 	}
 
-	//삭제
+	/* 삭제 기능 */
 	private void personDelete() {
 		try {
 			row = table.getSelectedRow();
@@ -673,7 +751,7 @@ public class Home extends JFrame implements ActionListener{
 
 	} // personDelete
 
-	// 수정메서드
+	/* 수정 기능 */
 	private void personUpdate() {
 		System.out.println("personUpdate");
 		System.out.println(flag);
@@ -743,18 +821,17 @@ public class Home extends JFrame implements ActionListener{
 			int fcnt = fdao.InfoUpdate(list);
 		}
 	} // InfoUpdate
-
+	
+	/* 테이블 컬럼별 길이 설정 */
 	private void tableSet() {
 		System.out.println("tableSet");
 
-		// 테이블 컬럼별 길이 설정
 		// 해보니까 가로길이를 설정해놨기 때문에 필요한것만 조정하면 나머지는 남은 너비에서 알아서 자동조정되는듯!
 		table.getColumn("NO").setPreferredWidth(30);
 		table.getColumn("연령(만)").setPreferredWidth(60);
 		table.getColumn("생년월일").setPreferredWidth(100);
 		table.getColumn("입학일").setPreferredWidth(100);
 	} // 
-
 
 	//test
 	public static void main(String[] args) {
