@@ -140,7 +140,7 @@ public class LoginMain extends JFrame implements ActionListener{
 				messege = "로그인에 성공하였습니다.";
 				tit = "login 성공";
 				JOptionPane.showMessageDialog(this, messege, tit, JOptionPane.INFORMATION_MESSAGE);
-				new Home("유아 관리 프로그램", logid);
+				new Home("유아 관리 프로그램 - Home", logid);
 //				// 로그인 성공 시 로그인 창을 숨긴다.
 //				setVisible(false);
 				// 프로그램이 종료되는게 아니라 하나의 프레임만 닫히는 메서드!!!!

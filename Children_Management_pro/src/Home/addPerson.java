@@ -31,6 +31,7 @@ import DB_table.FamilyBean;
 import DB_table.FamilyDao;
 import DB_table.PersonBean;
 import DB_table.PersonDao;
+import DB_table.PhysicalDao;
 
 public class addPerson extends JFrame implements ActionListener, ItemListener{
 
@@ -315,6 +316,7 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 				int p_no = pdao.personNum(txtInfo[2].getText());
 				infoInsert(p_no);
 				finfoInsert(p_no);
+				phyAgeInsert(p_no);
 			}
 		}
 		else if (obj == btnCancle) {
@@ -325,6 +327,12 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 		}
 
 	} // actionPerformed
+	
+	//신체발달 데이터 추가
+	private void phyAgeInsert(int p_no) {
+		PhysicalDao phdao = new PhysicalDao();
+		phdao.phyAgeInsert(p_no);
+	}
 
 	//가족테이블에 데이터 추가
 	private void finfoInsert(int no) {

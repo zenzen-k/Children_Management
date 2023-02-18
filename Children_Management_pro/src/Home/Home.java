@@ -15,7 +15,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -51,19 +53,22 @@ public class Home extends JFrame implements ActionListener{
 	JLabel[] lbAge = new JLabel[6];
 	JLabel[] lbTitle = new JLabel[4]; 
 	JTextField[][] txtPhysical = new JTextField[6][3];
+	JButton btnUpdatePhy = new JButton();
 	
-	Font font = new Font("나눔스퀘어 네오 Regular", Font.PLAIN, 13);
-	Font fontBold = new Font("나눔스퀘어 네오 Regular", Font.BOLD, 13);
-	boolean flag = false;
-	int row; //선택 행번호
+	private Font font = new Font("나눔스퀘어 네오 Regular", Font.PLAIN, 13);
+	private Font fontBold = new Font("나눔스퀘어 네오 Regular", Font.BOLD, 13);
+	private boolean flag = false;
+	private boolean pflag = false;
+	private int row; //선택 행번호
 
 	// 정의
-	PersonDao pdao = null;
-	JoinDao jdao = null;
-	FamilyDao fdao = null;
-	ClassroomDao cdao = null;
-	ArrayList<JoinBean> jlists = null;
-	String loginInfo;
+	private PersonDao pdao = null;
+	private JoinDao jdao = null;
+	private FamilyDao fdao = null;
+	private ClassroomDao cdao = null;
+	private PhysicalDao phdao = null;
+	private ArrayList<JoinBean> jlists = null;
+	private String loginInfo;
 
 
 	/* 생성자 */
@@ -112,7 +117,6 @@ public class Home extends JFrame implements ActionListener{
 
 	}
 
-
 	/* 메인화면 구상 - 왼쪽*/
 	private void Lcompose() {
 		System.out.println("Lcompose");
@@ -155,6 +159,7 @@ public class Home extends JFrame implements ActionListener{
 		lbCheck.setForeground(Color.GRAY); // 글자색변경
 		pnMenuBar.add(lbHome);
 		pnMenuBar.add(lbCheck);
+		lbCheck.addMouseListener(new MouseHandler());
 
 		// 좌측 상단 버튼 - 이름검색, 추가, 필터, 정렬, 삭제
 		JPanel pnLeft = new JPanel();
@@ -371,7 +376,7 @@ public class Home extends JFrame implements ActionListener{
 		
 	} //Rcompose()
 	
-	/* 메인화면 구상 - 신체정보*/
+	/* 메인화면 구상 - 신체정보 */
 	private void Pcompose() {
 		System.out.println("Pcompose");
 		LineBorder lB = new LineBorder(Color.gray, 1, true);
@@ -393,10 +398,10 @@ public class Home extends JFrame implements ActionListener{
 		btnPhysical.setEnabled(false);
 		btnPhysical.setFont(font);
 		
-		btnUpdate = new JButton("수정");
-		btnUpdate.setBounds(585, 0, 60, 25);
-		pnPhysical.add(btnUpdate);
-		btnUpdate.setFont(font);
+		btnUpdatePhy = new JButton("수정");
+		btnUpdatePhy.setBounds(585, 0, 60, 25);
+		pnPhysical.add(btnUpdatePhy);
+		btnUpdatePhy.setFont(font);
 		
 		//내용
 		JPanel pbPhyTitle = new JPanel();
@@ -425,11 +430,12 @@ public class Home extends JFrame implements ActionListener{
 //		pbPhyData.setBackground(Color.pink);
 		
 		lbAge[0] = new JLabel("만 3세 1학기");
-		lbAge[1] = new JLabel("만 3세 1학기");
-		lbAge[2] = new JLabel("만 3세 1학기");
-		lbAge[3] = new JLabel("만 3세 1학기");
-		lbAge[4] = new JLabel("만 3세 1학기");
-		lbAge[5] = new JLabel("만 3세 1학기");
+		lbAge[1] = new JLabel("만 3세 2학기");
+		lbAge[2] = new JLabel("만 4세 1학기");
+		lbAge[3] = new JLabel("만 4세 2학기");
+		lbAge[4] = new JLabel("만 5세 1학기");
+		lbAge[5] = new JLabel("만 5세 2학기");
+		
 		
 		for(i=0; i<lbAge.length; i++) {
 			lbAge[i].setFont(font);
@@ -442,7 +448,22 @@ public class Home extends JFrame implements ActionListener{
 				System.out.println(i + " " + j);
 			}
 		}
+		//수정불가
+		for (i = 0; i < txtPhysical.length; i++) {
+			for(int j=0; j<txtPhysical[i].length; j++) {
+				txtPhysical[i][j].setEditable(false);
+			}
+		}
+		
+		// 이벤트 리스너
+		btnUpdatePhy.addActionListener(this);
+		
 	} //Pcompose()
+	
+	/* 메인화면 구상 - 출결정보 */ // 출결페이지 완료하면 추가할것.
+	private void Ccompose() {
+		
+	}
 	
 	/* 가져온 데이터 rowData에넣기 */
 	private void dataInput() {
@@ -523,7 +544,7 @@ public class Home extends JFrame implements ActionListener{
 		}
 	} // getJoinTable
 
-	/* 인적사항 초기화 */
+	/* 전체 텍스트필드 초기화 */
 	private void clearTxtInfo() {
 		for(int i =0; i< txtInfo.length; i++) {
 			txtInfo[i].setText("");
@@ -535,6 +556,11 @@ public class Home extends JFrame implements ActionListener{
 			txtFName[i].setText("");
 			txtFbirth[i].setText("");
 			txtPhone[i].setText("");
+		}
+		for (int i = 0; i < txtPhysical.length; i++) {
+			for(int j=0; j<txtPhysical[i].length; j++) {
+				txtPhysical[i][j].setText("");
+			}
 		}
 	} // clearTxtInfo
 
@@ -554,18 +580,34 @@ public class Home extends JFrame implements ActionListener{
 	class MouseHandler extends MouseAdapter{
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("mouse");
-			clearTxtInfo();
-			row = table.getSelectedRow();
-			// 선택한 행의 학생번호를 가지고 mouseInfo를 호출한다.
-			int no = (int)table.getValueAt(row, 1);
-			mouseInfo(no);
-			mousePhysical(no);
+			Object obj = e.getSource();
+			if (obj == lbCheck) {
+				new Attendbook("유아 관리 프로그램 - 출결관리", loginInfo);
+				dispose();
+			}
+			else {
+				clearTxtInfo();
+				row = table.getSelectedRow();
+				// 선택한 행의 학생번호를 가지고 mouseInfo를 호출한다.
+				int no = (int)table.getValueAt(row, 1);
+				mouseInfo(no);
+				mousePhysical(no);
+			}
 		} // mouseClicked
 		
 		/* 클릭한 정보를 토대로 우측 신체발달 텍스트 필드에 추가 */
 		private void mousePhysical(int no) {
 			System.out.println("mousePhysical");
-		}
+			
+			phdao = new PhysicalDao();
+			ArrayList<PhysicalBean> lists = phdao.getAllInfo(no);
+			
+			for(int i=0; i<lists.size(); i++) {
+					txtPhysical[i][0].setText(lists.get(i).getPd_date()); // i -> 0
+					txtPhysical[i][1].setText(String.valueOf(lists.get(i).getWeight()));
+					txtPhysical[i][2].setText(String.valueOf(lists.get(i).getHeight()));
+			}
+		} //mousePhysical
 		
 		/* 클릭한 정보를 토대로 우측 인적사항 텍스트 필드에 추가 */
 		public void mouseInfo(int p_no) {
@@ -653,9 +695,8 @@ public class Home extends JFrame implements ActionListener{
 			System.out.println("필터");
 			filterPerson();
 		}
-		else if(obj == btnUpdate) { // 수정버튼
+		else if(obj == btnUpdate) { // 인적사항 수정버튼
 			System.out.println("수정");
-
 			flag = !flag;
 			personUpdate();
 			getJoinTable();
@@ -664,7 +705,11 @@ public class Home extends JFrame implements ActionListener{
 			System.out.println("이미지업로드");
 			JOptionPane.showMessageDialog(this, "접근불가 : 준비중입니다.", "No Access", JOptionPane.ERROR_MESSAGE);
 		}
-
+		else if(obj == btnUpdatePhy) { // 신체 수정버튼
+			System.out.println("수정");
+			pflag = !pflag;
+			physicalUpdate();
+		}
 
 		tableSet();
 	} //actionPerformed
@@ -692,6 +737,7 @@ public class Home extends JFrame implements ActionListener{
 			table = new JTable(rowData, columnName); 
 			scrollPane.setViewportView(table);
 			tableSet();
+			table.addMouseListener(new MouseHandler());
 		}catch(NumberFormatException e) {
 			JOptionPane.showMessageDialog(this, "잘못된 값입니다. 보기의 숫자만 입력하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
@@ -731,7 +777,7 @@ public class Home extends JFrame implements ActionListener{
 			table = new JTable(rowData, columnName);
 			scrollPane.setViewportView(table);
 			tableSet();
-
+			setevent();
 		} catch(NumberFormatException e) {
 			JOptionPane.showMessageDialog(this, "잘못된 값입니다. 보기의 숫자만 입력하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
 			sortPerson();
@@ -755,8 +801,77 @@ public class Home extends JFrame implements ActionListener{
 		}
 
 	} // personDelete
+	
+	/* 신체 수정 기능 */
+	private void physicalUpdate() {
+		// 행을 클릭 안하고 수정버튼 눌렀을 때
+		try {
+			System.out.println(Integer.parseInt(txtSelcNo.getText()));
+		}catch(NumberFormatException e) {
+			JOptionPane.showMessageDialog(this, "접근불가 : 수정할 행을 클릭하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
+			pflag = false;
+			return;
+		}
+		if(pflag == true) { // 클릭을 했을 때 수정가능상태로 바뀜
+			System.out.println("수정가능");
+			for (int i = 0; i < txtPhysical.length; i++) {
+				for(int j=0; j<txtPhysical[i].length; j++) {
+					txtPhysical[i][j].setEditable(true);
+				}
+				if(txtPhysical[i][0].getText().equals(" ")) {
+					txtPhysical[i][0].setText("");
+				}
+//				if(txtPhysical[i][1].getText() == "0.0") {
+//					txtPhysical[i][1].setText("");
+//				}
+			}
+		} 
+		else if(pflag == false) { // 수정 불가능 상태 + 텍스트에 있는 데이터 리턴
+			System.out.println("수정불가능");
 
-	/* 수정 기능 */
+			ArrayList<PhysicalBean> lists = new ArrayList<PhysicalBean>(); 
+
+			// 수정불가능으로 변경함
+			for (int i = 0; i < txtPhysical.length; i++) {
+				for(int j=0; j<txtPhysical[i].length; j++) {
+					txtPhysical[i][j].setEditable(false);
+				}
+			}
+			// 텍스트필드입력된값가져옴 - 
+			for(int i=0; i<txtPhysical.length; i++) {
+				boolean formCheck = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", txtPhysical[i][0].getText());
+				// 공백넣깅
+				if(txtPhysical[i][0].getText().length() == 0) {
+					txtPhysical[i][0].setText(" ");
+				}
+				if(txtPhysical[i][1].getText().length() == 0) {
+					txtPhysical[i][1].setText("0.0");
+				}
+				if(txtPhysical[i][2].getText().length() == 0) {
+					txtPhysical[i][2].setText("0.0");
+				}
+				//저장
+				if(formCheck || txtPhysical[i][0].getText().equals(" ")) {
+					PhysicalBean pb = new PhysicalBean();
+					pb.setPd_age(lbAge[i].getText());
+					pb.setPd_date(txtPhysical[i][0].getText());
+					pb.setWeight(Double.parseDouble(txtPhysical[i][1].getText())); 
+					pb.setHeight(Double.parseDouble(txtPhysical[i][2].getText())); 
+					pb.setP_no(Integer.parseInt(txtSelcNo.getText()));
+					lists.add(pb);
+				}
+				else {
+					JOptionPane.showMessageDialog(this, "검사일자는 공백 없이 아래형식으로 입력하세요 \n yyyy-mm-dd", "ERROR",JOptionPane.INFORMATION_MESSAGE);
+					pflag = true;
+					physicalUpdate();
+				} //else
+			}
+			int cnt = phdao.physicalUpdate(lists);
+			System.out.println(cnt);
+		} //수정중일때 -> 
+	} //physicalUpdate
+	
+	/* 인적사항 수정 기능 */
 	private void personUpdate() {
 		System.out.println("personUpdate");
 		System.out.println(flag);
@@ -824,6 +939,7 @@ public class Home extends JFrame implements ActionListener{
 				phoneFormat(txtPhone[i].getText());
 			}
 			int fcnt = fdao.InfoUpdate(list);
+			System.out.println(fcnt + " " + pcnt);
 		}
 	} // InfoUpdate
 	
@@ -840,7 +956,7 @@ public class Home extends JFrame implements ActionListener{
 
 	//test
 	public static void main(String[] args) {
-		new Home("유아 관리 프로그램","nnew11");
+		new Home("유아 관리 프로그램 - Home","nnew11");
 	}
 
 
