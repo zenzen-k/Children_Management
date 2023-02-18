@@ -44,11 +44,11 @@ commit;
 -- 회원(교사)
 drop table teacher;
 create table teacher(
-	t_id varchar2(20) primary key, --영소문자 숫자
-	t_pw varchar2(16) not null, -- 대문자 소문자 숫자
+	t_id varchar2(20) primary key, --영소문자 숫자 6~20
+	t_pw varchar2(16) not null, -- 대문자 소문자 숫자 8~16
 	c_no number not null,
 	emp_no varchar2(20) not null,
-	t_name varchar2(30) not null, -- 한글, 영어
+	t_name varchar2(30) not null, -- 한글10글자, 영어30자
 	t_phone varchar2(15) not null
 );
 
@@ -93,17 +93,9 @@ create table person(
 	note varchar2(100)
 );
 
-insert into person
-values(230101, '김유정', '19-5-3', '여' ,'23-03-02', '인천시 남동구 간석2동 감자아파트 1007동 102호',0,1,'땅콩알러지');
-insert into person
-values(220212, '정시율', '18-4-8', '남' ,'22-03-02', '인천시 연수구 송도동 고구마아파트 204동 1108호',0,2,'방과후교실');
 
 select * from person;
 commit;
-
-insert into person 
-values(stunum('2017-05-05', p_seq.nextval), '안유진', '2021-03-02', '여', '2017-05-05', 
-'인천시 남동구 구월동 아이브아파트', 0, 3, '없음');
 
 -- 가족
 drop table family;
@@ -115,7 +107,6 @@ create table family(
 	f_phone varchar2(15) not null
 );
 
-insert into family values(230101, '부', '김영광', '1990-11-10', '010-1234-1234');
 
 select * from family;
 commit;
@@ -129,10 +120,10 @@ select * from person natural join family;
 drop table physicalDev;
 create table physicalDev(
 	p_no number references person(p_no) on delete cascade, -- person(p_no)의 자식테이블
-	pd_age varchar2(15) not null,
-	pd_date date,
-	weight decimal(5,2),
-	height decimal(5,2)
+	pd_age varchar2(20) not null,
+	pd_date varchar2(20) ,
+	weight number default 0.0,
+	height number default 0.0
 );
 
 insert into physicalDev values(220212, '3세 1학기', '2023-02-17' ,18.5 ,100.07);
@@ -146,11 +137,11 @@ select p_name, weight, height from physicalDev natural join person;
 drop table attend_book;
 create table attend_book(
 	p_no number references person(p_no) on delete cascade, -- person(p_no)의 자식테이블
-	attend number default 0,
-	absence number default 0,
-	earlier number default 0,
+	attend number default 0 check(attend in(0,1)), -- 출석여부
+	absence number default 0 check(absence in(0,1)), -- 결석여부
+	earlier number default 0 check(earlier in(0,1)), -- 조퇴여부 
 	classday number default 180, -- 수업일수
-	adate date default sysdate
+	adate date default sysdate -- 출결날짜관리
 );
 
 insert into attend_book(p_no) values(220212);
