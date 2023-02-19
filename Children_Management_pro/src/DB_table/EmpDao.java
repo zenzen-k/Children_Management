@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class EmpDao {
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String id = "jspid";
-	String pw = "jsppw";
+	private String driver = "oracle.jdbc.driver.OracleDriver";
+	private String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+	private String id = "jspid";
+	private String pw = "jsppw";
 	
 	Connection conn = null;
 	
