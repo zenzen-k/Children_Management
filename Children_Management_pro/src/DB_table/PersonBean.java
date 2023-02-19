@@ -10,7 +10,7 @@ public class PersonBean {
 	private int img_id ;
 	private int c_no ;
 	private String note ;
-	
+	private int count;
 	
 	public PersonBean() {
 		super();
@@ -28,6 +28,14 @@ public class PersonBean {
 		this.img_id = img_id;
 		this.c_no = c_no;
 		this.note = note;
+	}
+	
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
 	}
 
 	public int getP_no() {

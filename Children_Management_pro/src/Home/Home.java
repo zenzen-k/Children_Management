@@ -582,7 +582,7 @@ public class Home extends JFrame implements ActionListener{
 			System.out.println("mouse");
 			Object obj = e.getSource();
 			if (obj == lbCheck) {
-				new Attendbook("유아 관리 프로그램 - 출결관리", loginInfo);
+				new AttendManage("유아 관리 프로그램 - 출결관리", loginInfo);
 				dispose();
 			}
 			else {
@@ -699,7 +699,7 @@ public class Home extends JFrame implements ActionListener{
 			System.out.println("수정");
 			flag = !flag;
 			personUpdate();
-			getJoinTable();
+			getSearch(txtSelcName.getText());
 		}
 		else if(obj == btnUpImg) {
 			System.out.println("이미지업로드");

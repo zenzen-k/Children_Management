@@ -219,6 +219,46 @@ public class JoinDao {
 		} 
 		return lists;
 	}
+
+	public ArrayList<JoinBean> getAllAttend(String nowDate, String c_name) {
+		ArrayList<JoinBean> lists = new ArrayList<JoinBean>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "select p_no, p_name, p_birth, attend, earlier, adate, c_name "
+					+ "from (select p_no, p_name, p_birth, c_name from person natural join classroom "
+					+ "where c_name = ? ) "
+					+ "natural join attendmanage "
+					+ "where adate = ? order by p_name, p_no";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, c_name);
+			ps.setString(2, nowDate);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				JoinBean jb = new JoinBean();
+				jb.setP_no(rs.getInt("p_no"));
+				jb.setP_name(rs.getString("p_name"));
+				jb.setP_birth(String.valueOf(rs.getDate("p_birth")));
+				jb.setAttend(rs.getInt("attend"));
+				jb.setEarlier(rs.getInt("earlier"));
+				jb.setAdate(String.valueOf(rs.getDate("adate")));
+				lists.add(jb);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null)
+					ps.close();
+				if(rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} 
+		return lists;
+	}
+
 	
 	
 	// 교실이름으로 조인 - 테이블

@@ -19,8 +19,36 @@ public class JoinBean {
 	private String t_pw;
 	private String t_name;
 	private String t_phone;
+	private int attend;
+	private int absence;
+	private int earlier;
+	private String adate;
 	
 	
+	public int getAttend() {
+		return attend;
+	}
+	public void setAttend(int attend) {
+		this.attend = attend;
+	}
+	public int getAbsence() {
+		return absence;
+	}
+	public void setAbsence(int absence) {
+		this.absence = absence;
+	}
+	public int getEarlier() {
+		return earlier;
+	}
+	public void setEarlier(int earlier) {
+		this.earlier = earlier;
+	}
+	public String getAdate() {
+		return adate;
+	}
+	public void setAdate(String adate) {
+		this.adate = adate;
+	}
 	public String getT_id() {
 		return t_id;
 	}

@@ -185,4 +185,32 @@ public class PersonDao {
 		return cnt;
 	} // personDelete
 	
+	//인원수와 학생벊
+	public ArrayList<PersonBean> getPersonNum(String c_name) {
+		ArrayList<PersonBean> lists = new ArrayList<PersonBean>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "select p_no from person natural join classroom where c_name = ?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, c_name);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				PersonBean pb = new PersonBean();
+				pb.setP_no(rs.getInt("p_no"));
+				lists.add(pb);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null)
+					ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return lists;
+	}
+	
 }
