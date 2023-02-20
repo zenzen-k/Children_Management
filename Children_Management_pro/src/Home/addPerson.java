@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import DB_table.AttendManageDao;
 import DB_table.ClassroomBean;
 import DB_table.ClassroomDao;
 import DB_table.FamilyBean;
@@ -317,6 +318,7 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 				infoInsert(p_no);
 				finfoInsert(p_no);
 				phyAgeInsert(p_no);
+				attendInsert(p_no);
 			}
 		}
 		else if (obj == btnCancle) {
@@ -328,6 +330,12 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 
 	} // actionPerformed
 	
+	// 출결데이터 추가
+	private void attendInsert(int p_no) {
+		AttendManageDao adao = new AttendManageDao();
+		adao.attendInsert(p_no);
+	}
+
 	//신체발달 데이터 추가
 	private void phyAgeInsert(int p_no) {
 		PhysicalDao phdao = new PhysicalDao();

@@ -45,7 +45,8 @@ public class JoinDao {
 		ResultSet rs = null;
 		String sql = "select p_no, p_name, p_birth, p_entran, c_name, c_age, t_name "
 				+ "from (select * from person natural join classroom order by p_name asc, p_birth asc) "
-				+ "natural join teacher order by p_name asc, p_birth asc";
+				+ "natural join teacher where not emp_no = 203 "
+				+ "order by p_name asc, p_birth asc";
 		try {
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();

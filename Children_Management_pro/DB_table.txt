@@ -147,3 +147,5 @@ create table attendManage(
 insert into attendManage(p_no) values(220212);
 select * from attend_book;
 commit;
+
+

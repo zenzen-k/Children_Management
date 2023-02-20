@@ -100,7 +100,7 @@ public class AttendManage extends JFrame implements ActionListener, ItemListener
 		adao = new AttendManageDao();
 
 		//날짜가 있는지 검색함. 없으면 전체학생 날짜데이터만 추가
-		int result = adao.selectAttend(nowDate);
+		int result = adao.selectAttend(nowDate, teacher[1]);
 		if(result == 0) {
 			ArrayList<AttendManageBean> lists = new ArrayList<AttendManageBean>();
 			PersonDao pdao = new PersonDao();
@@ -115,6 +115,7 @@ public class AttendManage extends JFrame implements ActionListener, ItemListener
 			}
 			adao.insertAdate(lists);
 		}
+		
 
 		jlists = jdao.getAllAttend(nowDate, teacher[1]);
 		rowData = new Object[jlists.size()][columnName.length]; // 테이블크기설정

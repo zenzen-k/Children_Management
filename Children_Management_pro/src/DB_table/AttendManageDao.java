@@ -66,6 +66,34 @@ public class AttendManageDao {
 		return result;
 	} //selectAttend
 	
+	public int selectAttend(String date, String name) {
+		int result = 0;
+		String sql = "select * from ATTENDMANAGE where ADATE = ? and cnotoname(p_no) = ?";
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, date);
+			ps.setString(2, name);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				result++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null)
+					ps.close();
+				if(rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} 
+		return result;
+	} //selectAttend
+	
 	public int updateAttend(ArrayList<AttendManageBean> lists) {
 		PreparedStatement ps = null;
 		String sql = "update ATTENDMANAGE set attend = ?, ABSENCE = ?, EARLIER = ? where p_no = ? and adate = ? ";
@@ -255,4 +283,18 @@ public class AttendManageDao {
 		}
 		return lists;
 	}
+
+	public void attendInsert(int p_no) {
+		String sql = "insert into ATTENDMANAGE(p_no, adate) values(?, to_char(sysdate, 'yyyy-mm-dd'))";
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, p_no);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 } //AttendManageDao클래스
+

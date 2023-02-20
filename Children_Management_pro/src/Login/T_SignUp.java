@@ -28,6 +28,7 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 
 	private ClassroomDao cDao = new ClassroomDao();
 	private EmpDao eDao = new EmpDao();
+	private TeacherDao tdao = new TeacherDao();
 	private int classCh2 = 0;
 	private int empCh2 = 0;
 	private int indexC, indexE;
@@ -210,6 +211,15 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 			JOptionPane.showMessageDialog(this, "직급을 선택하세요", "선택오류", JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
+		
+		String empCh = cEmp.getItem(indexE);
+		empCh2 = eDao.empNo(empCh);
+		// 이미 교사가 존재하는 반 클릭시 -> 담임/주임은 교실 당 딱 한명만 가능, 부담임은 추가 가능
+		if(tdao.checkTeacher(indexC) > 0 && empCh2 != 203) {
+			JOptionPane.showMessageDialog(this, "이미 해당 클래스에 담당교사가 존재합니다. \n부담임을 선택하거나 다른 교실을 선택하십시오.", "선택오류", JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
+		
 		return true;
 	} // 
 	

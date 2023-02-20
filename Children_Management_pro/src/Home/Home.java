@@ -55,6 +55,7 @@ public class Home extends JFrame implements ActionListener{
 	JTextField[][] txtPhysical = new JTextField[6][3];
 	JButton btnUpdatePhy = new JButton();
 	
+	
 	private Font font = new Font("나눔스퀘어 네오 Regular", Font.PLAIN, 13);
 	private Font fontBold = new Font("나눔스퀘어 네오 Regular", Font.BOLD, 13);
 	private boolean flag = false;
@@ -385,9 +386,8 @@ public class Home extends JFrame implements ActionListener{
 		
 		JPanel pnPhysical = new JPanel();
 		pnPhysical.setLayout(null);
-		pnPhysical.setBounds(600, 335, 650, 200);
+		pnPhysical.setBounds(600, 340, 650, 220);
 		contentPane.add(pnPhysical);
-//		pnPhysical.setBackground(Color.pink);
 
 		//신체발달
 		JButton btnPhysical = new JButton("신체발달");
@@ -405,7 +405,7 @@ public class Home extends JFrame implements ActionListener{
 		
 		//내용
 		JPanel pbPhyTitle = new JPanel();
-		pbPhyTitle.setBounds(0, 30, 650, 25);
+		pbPhyTitle.setBounds(0, 40, 650, 25);
 		pbPhyTitle.setLayout(new GridLayout());
 		pnPhysical.add(pbPhyTitle);
 //		pbPhyTitle.setBackground(Color.pink);
@@ -424,7 +424,7 @@ public class Home extends JFrame implements ActionListener{
 		}
 		
 		JPanel pbPhyData = new JPanel();
-		pbPhyData.setBounds(0, 55, 650, 150);
+		pbPhyData.setBounds(0, 65, 650, 150);
 		pbPhyData.setLayout(new GridLayout(6,4));
 		pnPhysical.add(pbPhyData);
 //		pbPhyData.setBackground(Color.pink);
@@ -460,10 +460,8 @@ public class Home extends JFrame implements ActionListener{
 		
 	} //Pcompose()
 	
-	/* 메인화면 구상 - 출결정보 */ // 출결페이지 완료하면 추가할것.
-	private void Ccompose() {
-		
-	}
+	
+	
 	
 	/* 가져온 데이터 rowData에넣기 */
 	private void dataInput() {
@@ -594,7 +592,7 @@ public class Home extends JFrame implements ActionListener{
 				mousePhysical(no);
 			}
 		} // mouseClicked
-		
+
 		/* 클릭한 정보를 토대로 우측 신체발달 텍스트 필드에 추가 */
 		private void mousePhysical(int no) {
 			System.out.println("mousePhysical");
@@ -663,6 +661,7 @@ public class Home extends JFrame implements ActionListener{
 			int result = JOptionPane.showConfirmDialog
 					(this, "프로그램을 종료 하시겠습니까?","Exit",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
 			if(result == 0) {
+				close();
 				System.exit(0);
 			}
 		}
@@ -953,11 +952,18 @@ public class Home extends JFrame implements ActionListener{
 		table.getColumn("생년월일").setPreferredWidth(100);
 		table.getColumn("입학일").setPreferredWidth(100);
 	} // 
-
-	//test
-	public static void main(String[] args) {
-		new Home("유아 관리 프로그램 - Home","nnew11");
+	
+	public void close() {
+		if(cdao != null)
+			cdao.exit();
+		if(pdao != null)
+			pdao.exit();
+		if(jdao != null)
+			jdao.exit();
+		if(fdao != null)
+			fdao.exit();
+		if(phdao != null)
+			phdao.exit();
 	}
-
 
 }

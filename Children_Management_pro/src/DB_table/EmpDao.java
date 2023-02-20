@@ -32,7 +32,7 @@ public class EmpDao {
 		ArrayList<EmpBean> lists = new ArrayList<EmpBean>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String sql = "select e_name from emp";
+		String sql = "select e_name from emp where not emp_no like '5%'";
 		try {
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();

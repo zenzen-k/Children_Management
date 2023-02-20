@@ -96,6 +96,24 @@ public class TeacherDao {
 		}
 		return cnt;
 	} // insertTeacher
+	
+	// 회원가입시 교사검사
+	public int checkTeacher(int indexC) {
+		int cnt = -1;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "select count(t_id) from teacher where c_no = ? and emp_no in(201, 202)";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, indexC);
+			rs = ps.executeQuery();
+			if(rs.next())
+				cnt = rs.getInt("count(t_id)");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cnt;
+	}
 
 	
 	
