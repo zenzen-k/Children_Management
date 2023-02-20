@@ -573,8 +573,10 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 
 	// 접속종료
 	public void close() {
-		fdao.exit();
-		cdao.exit();
+		if(fdao!=null)
+			fdao.exit();
+		if(cdao!=null)
+			cdao.exit();
 	}
 
 }

@@ -184,4 +184,75 @@ public class AttendManageDao {
 		}
 		return num;
 	}
+	
+	/* 개인 테이블 정보 불러오기 */
+	public ArrayList<AttendManageBean> getPersonAttend(int p_no) {
+		ArrayList<AttendManageBean> lists = new ArrayList<AttendManageBean>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "select * from ATTENDMANAGE where p_no = ? order by adate desc";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, p_no);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				AttendManageBean ab = new AttendManageBean();
+				ab.setP_no(rs.getInt("p_no"));
+				ab.setAdate(String.valueOf(rs.getDate("adate")));
+				ab.setAttend(rs.getInt("attend"));
+				ab.setAbsence(rs.getInt("absence"));
+				ab.setEarlier(rs.getInt("earlier"));
+				ab.setClassday(rs.getInt("classday"));
+				lists.add(ab);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(ps != null)
+					ps.close();
+				if(rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return lists;
+	}
+
+	public ArrayList<AttendManageBean> periodAdate(String adateStart, String adateEnd, int p_no) {
+		ArrayList<AttendManageBean> lists = new ArrayList<AttendManageBean>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "select * from ATTENDMANAGE where p_no = ? and adate between ? and ?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, p_no);
+			ps.setString(2, adateStart);
+			ps.setString(3, adateEnd);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				AttendManageBean ab = new AttendManageBean();
+				ab.setP_no(rs.getInt("p_no"));
+				ab.setAdate(String.valueOf(rs.getDate("adate")));
+				ab.setAttend(rs.getInt("attend"));
+				ab.setAbsence(rs.getInt("absence"));
+				ab.setEarlier(rs.getInt("earlier"));
+				ab.setClassday(rs.getInt("classday"));
+				lists.add(ab);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null)
+					ps.close();
+				if(rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return lists;
+	}
 } //AttendManageDao클래스
