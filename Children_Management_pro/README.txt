@@ -18,3 +18,5 @@
 	   delete teacher where t_id = 교사아이디; 로 실행하시면 됩니다!
 		
 	6. 그냥 로그인 하실 때에는 있는 계정 중 아무 계정이나 로그인해서 보시면 됩니당~
+	
+	7. 프로그램 시작은 StartLogin 패키지의 LoginMain.java 실행하시면 됩니다.
