@@ -8,7 +8,7 @@ public class JoinBean {
 	private String gender ;
 	private String p_entran ; // 입학일
 	private String addr ;
-	private int img_id ;
+	private String img_id ;
 	private String p_note ; // 특이사항
 	private int c_no ;
 	private String c_name;
@@ -109,10 +109,10 @@ public class JoinBean {
 	public void setAddr(String addr) {
 		this.addr = addr;
 	}
-	public int getImg_id() {
+	public String getImg_id() {
 		return img_id;
 	}
-	public void setImg_id(int img_id) {
+	public void setImg_id(String img_id) {
 		this.img_id = img_id;
 	}
 	public String getP_note() {

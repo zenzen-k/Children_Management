@@ -104,7 +104,7 @@ public class PhysicalDao {
 	
 	//정보추가
 	public int physicalUpdate(ArrayList<PhysicalBean> lists) {
-		System.out.println(lists.get(1).getPd_date());
+		System.out.println("SQL update 실행");
 		PreparedStatement ps = null;
 		int cnt = -1;
 		for(int i=0; i<lists.size(); i++) {

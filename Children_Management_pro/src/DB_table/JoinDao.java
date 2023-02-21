@@ -43,7 +43,7 @@ public class JoinDao {
 		ArrayList<JoinBean> lists = new ArrayList<JoinBean>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String sql = "select p_no, p_name, p_birth, p_entran, c_name, c_age, t_name "
+		String sql = "select p_no, p_name, p_birth, p_entran, c_name, c_age, t_name, img_id "
 				+ "from (select * from person natural join classroom order by p_name asc, p_birth asc) "
 				+ "natural join teacher where not emp_no = 203 "
 				+ "order by p_name asc, p_birth asc";
@@ -59,6 +59,7 @@ public class JoinDao {
 				jb.setC_name(rs.getString("c_name"));
 				jb.setC_age(rs.getInt("c_age"));
 				jb.setT_name(rs.getString("t_name"));
+				jb.setImg_id(rs.getString("img_id"));
 				lists.add(jb);
 			}
 		} catch (SQLException e) {

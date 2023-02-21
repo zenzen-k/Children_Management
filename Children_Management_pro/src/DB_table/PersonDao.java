@@ -44,7 +44,7 @@ public class PersonDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String sql = "select p_no, p_name, gender, cnotoname(p_no), to_char(p_birth,'yy-mm-dd') bdate, "
-				+ "to_char(p_entran,'yy-mm-dd') edate, tnotoname(c_no), addr, note "
+				+ "to_char(p_entran,'yy-mm-dd') edate, tnotoname(c_no), addr, note , img_id "
 				+ "from person where p_no = " + no;
 		try {
 			ps = conn.prepareStatement(sql);
@@ -60,6 +60,7 @@ public class PersonDao {
 				jb.setT_name(rs.getString("tnotoname(c_no)"));
 				jb.setAddr(rs.getString("addr"));
 				jb.setP_note(rs.getString("note"));
+				jb.setImg_id(rs.getString("img_id"));
 
 				lists.add(jb);
 			}
@@ -84,12 +85,13 @@ public class PersonDao {
 	public int InfoUpdate(PersonBean pb) {
 		int cnt = -1;
 		PreparedStatement ps = null;
-		String sql = "update person set addr = ? , note = ? where p_no = ?";
+		String sql = "update person set addr = ? , note = ?, img_id =? where p_no = ?";
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, pb.getAddr());
 			ps.setString(2, pb.getNote());
-			ps.setInt(3, pb.getP_no());
+			ps.setString(3, pb.getImg_id());
+			ps.setInt(4, pb.getP_no());
 			cnt = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -117,7 +119,7 @@ public class PersonDao {
 			ps.setString(4, pb.getGender());
 			ps.setString(5, pb.getP_entran());
 			ps.setString(6, pb.getAddr());
-			ps.setInt(7, pb.getImg_id());
+			ps.setString(7, pb.getImg_id());
 			ps.setInt(8, pb.getC_no());
 			ps.setString(9, pb.getNote());
 			

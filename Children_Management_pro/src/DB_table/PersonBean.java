@@ -7,7 +7,7 @@ public class PersonBean {
 	private String gender ;
 	private String p_entran ; // 입학일
 	private String addr ;
-	private int img_id ;
+	private String img_id ;
 	private int c_no ;
 	private String note ;
 	private int count;
@@ -16,7 +16,7 @@ public class PersonBean {
 		super();
 	}
 
-	public PersonBean(int p_no, String p_name, String p_birth, String gender, String p_entran, String addr, int img_id,
+	public PersonBean(int p_no, String p_name, String p_birth, String gender, String p_entran, String addr, String img_id,
 			int c_no, String note) {
 		super();
 		this.p_no = p_no;
@@ -86,11 +86,11 @@ public class PersonBean {
 		this.addr = addr;
 	}
 
-	public int getImg_id() {
+	public String getImg_id() {
 		return img_id;
 	}
 
-	public void setImg_id(int img_id) {
+	public void setImg_id(String img_id) {
 		this.img_id = img_id;
 	}
 

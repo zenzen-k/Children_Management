@@ -416,7 +416,7 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 		pb.setGender(gen);
 		pb.setP_entran(txtInfo[2].getText());
 		pb.setAddr(txtInfo[3].getText());
-		pb.setImg_id(0);
+		pb.setImg_id(" ");
 		pb.setC_no(c_noChoice);
 		pb.setNote(txtInfo[4].getText());
 
@@ -576,7 +576,7 @@ public class addPerson extends JFrame implements ActionListener, ItemListener{
 		for(int i = 0; i<txtInfo.length; i++) {
 			txtInfo[i].setText("");
 		}
-		txtPerNo.setText("");
+		txtPerNo = new JTextField("학번은 자동 입력됩니다.");
 	} // clearTextField
 
 	// 접속종료

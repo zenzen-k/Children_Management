@@ -40,7 +40,7 @@ import DB_table.JoinDao;
 import DB_table.PersonBean;
 import DB_table.PersonDao;
 import Home.Home.MouseHandler;
-import Login.LoginMain;
+import StartLogin.LoginMain;
 
 public class AttendManage extends JFrame implements ActionListener, ItemListener {
 
@@ -527,7 +527,7 @@ public class AttendManage extends JFrame implements ActionListener, ItemListener
 		}
 
 		if(cnt>0)
-			JOptionPane.showMessageDialog(this, "수정성공", "Success", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "수정완료되었습니다.", "Success", JOptionPane.INFORMATION_MESSAGE);
 		else if(cnt<0)
 			JOptionPane.showMessageDialog(this, "수정실패 : 관리자에게 문의", "Fail", JOptionPane.INFORMATION_MESSAGE);
 	} //updateAttend

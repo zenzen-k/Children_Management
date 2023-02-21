@@ -52,7 +52,10 @@ create table teacher(
 	t_phone varchar2(15) not null
 );
 
-insert into teacher values('sys', 'sys1234', 0, 501, '관리자', '010-2222-5555');
+insert into teacher values('tata1234', '12341234', 1, 201, '김태연', '01022225555');
+insert into teacher values('yoona1234', '12341234', 2, 202, '임윤아', '01044445555');
+insert into teacher values('tiffany1234', '12341234', 3, 202, '황미영', '010-2221544');
+insert into teacher values('yuri1234', '12341234', 4, 202, '권유리', '01012345555');
 
 select * from teacher;
 commit;
@@ -63,7 +66,7 @@ commit;
 drop table img;
 create table img(
 	img_id number primary key,
-	img_name varchar2(50)
+	img_name varchar2(100)
 );
 
 commit;
@@ -80,7 +83,7 @@ create sequence p_seq
 
 
 -- 학생
-drop table person;
+drop table person cascade constraints;
 create table person(
 	p_no number primary key,
 	p_name varchar2(30) not null,
@@ -88,11 +91,23 @@ create table person(
 	gender varchar2(5) default '남' check(gender in('남','여')),
 	p_entran date default sysdate not null , --입학일
 	addr varchar2(120),
-	img_id number,
+	img_id varchar2(50),
 	c_no number,
 	note varchar2(100)
 );
 
+insert into person values(stunum('2023-03-02', p_seq.nextval), '혜인', '2019-02-18', '여', '2023-03-02', '서울시 강남구 포이동', ' ', 1, '계란 알러지 있음');
+insert into person values(stunum('2023-03-02', p_seq.nextval), '해린', '2019-12-08', '남', '2023-03-02', '서울시 강남구 양재동', ' ', 1, '없음');
+insert into person values(stunum('2023-03-02', p_seq.nextval), '다니엘', '2019-05-19', '여', '2023-03-02', '서울시 강남구 도곡동', ' ', 1, '다문화 가정');
+insert into person values(stunum('2022-03-02', p_seq.nextval), '하니', '2018-08-05', '남', '2022-03-02', '서울시 강남구 대치동', ' ', 2, '없음');
+insert into person values(stunum('2022-03-02', p_seq.nextval), '민지', '2018-11-02', '여', '2022-03-02', '서울시 서초구 방배동', ' ', 2, '방과 후 태권도 학원에서 데리러 옴');
+insert into person values(stunum('2022-03-02', p_seq.nextval), '이서', '2018-04-30', '여', '2022-03-02', '서울시 서초구 방배동', ' ', 2, '방과 후 피아노 학원에서 데리러 옴');
+insert into person values(stunum('2021-03-02', p_seq.nextval), '리즈', '2017-08-05', '남', '2021-03-02', '경기도 성남시 분당구 정자동', ' ', 3, '없음');
+insert into person values(stunum('2021-03-02', p_seq.nextval), '장원영', '2017-09-25', '남', '2021-03-02', '경기도 성남시 분당구 분당동', ' ', 3, '밀가루 알러지 있음');
+insert into person values(stunum('2021-03-02', p_seq.nextval), '레이', '2017-05-13', '여', '2021-03-02', '경기도 성남시 분당구 서현동', ' ', 3, '없음');
+insert into person values(stunum('2021-03-02', p_seq.nextval), '미미', '2017-06-03', '남', '2021-03-02', '인천시 남동구 간석동', ' ', 4, '없음');
+insert into person values(stunum('2021-03-02', p_seq.nextval), '안유진', '2017-03-21', '여', '2021-03-02', '인천시 계양구 계산동', ' ', 4, '없음');
+insert into person values(stunum('2021-03-02', p_seq.nextval), '이영지', '2017-12-05', '남', '2021-03-02', '인천시 부평구 십정동', ' ', 4, '방과 후 태권도 학원에서 데리러 옴');
 
 select * from person;
 commit;
@@ -107,12 +122,30 @@ create table family(
 	f_phone varchar2(15) not null
 );
 
+insert into family values(230001, '부', '김철수', '1988-01-01', 01012341234);
+insert into family values(230001, '모', '김영희', '1989-11-28', 01011112222);
+insert into family values(230002, '부', '박철수', '1988-09-18', 01022223333);
+insert into family values(230002, '모', '강민희', '1985-10-22', 01044445555);
+insert into family values(230003, '부', '다니', '1988-02-18', 01077778888);
+insert into family values(220004, '모', '하림', '1990-10-22', 01099996666);
+insert into family values(220005, '부', '민경훈', '1982-07-13', 01045644456);
+insert into family values(220005, '모', '이나나', '1990-05-30', 01044445555);
+insert into family values(220006, '조부', '김정혁', '1960-08-03', 01044445555);
+insert into family values(220006, '조모', '신정혜', '1963-04-10', 01077778888);
+insert into family values(210007, '모', '주현영', '1992-03-27',01022223333);
+insert into family values(210007, '형제', '미미', '2017-06-03', 01045641234);
+insert into family values(210008, '부', '서장훈', '1982-03-27', 01078947561);
+insert into family values(210009, '부', '정민기', '1993-12-23', 01012221555);
+insert into family values(210009, '모', '김민지', '1989-12-03', 01050001111);
+insert into family values(210010, '부', '김희찰', '1993-06-02',01022223333);
+insert into family values(210010, '모', '최영희', '1984-10-15', 01077778888);
+insert into family values(210011, '부', '신지민', '1981-02-23', 01015548984);
+insert into family values(210011, '모', '백승', '1982-01-08',01011112222);
+insert into family values(210012, '모', '하지영', '1989-11-13',01022223333);
 
 select * from family;
 commit;
 
-
-select * from person natural join family;
 
 
 -- 학생객체가 생성되면 자동으로 학기만 데이터 생성하게 만들기
@@ -126,7 +159,82 @@ create table physicalDev(
 	height number default 0.0
 );
 
-insert into physicalDev values(220212, '3세 1학기', '2023-02-17' ,18.5 ,100.07);
+insert into physicalDev values(230002, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230002, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230002, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230002, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230002, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230002, '만 5세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230001, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230001, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230001, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230001, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230001, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230001, '만 5세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230003, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230003, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230003, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230003, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230003, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(230003, '만 5세 2학기', ' ' , 0.0 , 0.0);
+
+insert into physicalDev values(220005, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220005, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220005, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220005, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220005, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220005, '만 5세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220004, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220004, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220004, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220004, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220004, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220004, '만 5세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220006, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220006, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220006, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220006, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220006, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(220006, '만 5세 2학기', ' ' , 0.0 , 0.0);
+
+insert into physicalDev values(210007, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210007, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210007, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210007, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210007, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210007, '만 5세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210008, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210008, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210008, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210008, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210008, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210008, '만 5세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210009, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210009, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210009, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210009, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210009, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210009, '만 5세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210010, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210010, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210010, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210010, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210010, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210010, '만 5세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210011, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210011, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210011, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210011, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210011, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210011, '만 5세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210012, '만 3세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210012, '만 3세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210012, '만 4세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210012, '만 4세 2학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210012, '만 5세 1학기', ' ' , 0.0 , 0.0);
+insert into physicalDev values(210012, '만 5세 2학기', ' ' , 0.0 , 0.0);
+                                        
+
 select * from physicalDev;
 commit;
 

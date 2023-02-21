@@ -15,15 +15,18 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import DB_table.*;
-import Login.LoginMain;
+import StartLogin.LoginMain;
 
 public class Home extends JFrame implements ActionListener{
 
@@ -70,7 +73,12 @@ public class Home extends JFrame implements ActionListener{
 	private PhysicalDao phdao = null;
 	private ArrayList<JoinBean> jlists = null;
 	private String loginInfo;
-
+	
+	
+	// 이미지파일열기
+	private JFileChooser jfc = new JFileChooser();
+	private JLabel lbImg = new JLabel("image/0.png");
+	ImageIcon icon;
 
 	/* 생성자 */
 	public Home(String title, String id) {
@@ -115,6 +123,10 @@ public class Home extends JFrame implements ActionListener{
 
 		// 테이블을 클릭하면 MouseHandler로 가기!
 		table.addMouseListener(new MouseHandler());
+		
+		// 파일 필터
+		jfc.setFileFilter(new FileNameExtensionFilter("png", "png"));
+		jfc.setMultiSelectionEnabled(false);//다중 선택 불가
 
 	}
 
@@ -233,7 +245,7 @@ public class Home extends JFrame implements ActionListener{
 		pnRight.add(txtSelcNo);
 
 		//인적사항 - 이미지칸
-		ImageIcon icon = imgsize();
+		icon = imgsize();
 		imgLabel.setIcon(icon);
 		imgLabel.setBounds(0,60,150,200);
 		pnRight.add(imgLabel);
@@ -334,6 +346,7 @@ public class Home extends JFrame implements ActionListener{
 		btnUpImg.setBounds(460, 20, 110, 25);
 		pnRight.add(btnUpdate);
 		pnRight.add(btnUpImg);
+		btnUpImg.setEnabled(false);
 
 		// 폰트 및 텍스트 - 수정금지 설정
 		btnInfo.setFont(fontBold);
@@ -489,12 +502,13 @@ public class Home extends JFrame implements ActionListener{
 	private ImageIcon imgsize() {
 		System.out.println("imgsize");
 
-		ImageIcon icon = new ImageIcon("image/0.png");
+//		ImageIcon icon = new ImageIcon("image/0.png");
+		icon = new ImageIcon(lbImg.getText());
 		Image img = icon.getImage();
 		Image imgsize = img.getScaledInstance(150, 200, Image.SCALE_SMOOTH); // 사이즈조정해주기!
 		// getScaledInstance -> 품질유지한 채 시이즈 변경하기
 		icon = new ImageIcon(imgsize);
-
+		//repaint();
 		return icon;
 	} //imgsize
 
@@ -530,8 +544,6 @@ public class Home extends JFrame implements ActionListener{
 			txtSelcName.setText("");
 		}
 		else {
-			System.out.println(jlists.size());
-
 			rowData = new Object[jlists.size()][columnName.length];
 			dataInput();
 			table = new JTable(rowData, columnName); // rowData의 값을 table에 올린다.
@@ -590,6 +602,16 @@ public class Home extends JFrame implements ActionListener{
 				int no = (int)table.getValueAt(row, 1);
 				mouseInfo(no);
 				mousePhysical(no);
+				ArrayList<JoinBean> lists = pdao.getAllInfo(no);
+				
+				if (lists.get(0).getImg_id().equals(" ")) {
+					lbImg.setText("image/0.png");
+				} else {
+					lbImg.setText(lists.get(0).getImg_id());
+				}
+				icon = imgsize();
+				imgLabel.setIcon(icon);
+				imgLabel.setBounds(0,60,150,200);
 			}
 		} // mouseClicked
 
@@ -650,7 +672,6 @@ public class Home extends JFrame implements ActionListener{
 			System.out.println("로그아웃");
 			int result = JOptionPane.showConfirmDialog // 확인하는 메세지. 확인 - 0 , 아니오 - 1, 취소 - 2 닫기 - -1 리턴
 					(this, "로그아웃 하시겠습니까?","Logout",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
-			System.out.println(result);
 			if(result == 0) {
 				dispose(); // 프레임창종료
 				new LoginMain("유아 관리 프로그램 - Login");
@@ -700,9 +721,26 @@ public class Home extends JFrame implements ActionListener{
 			personUpdate();
 			getSearch(txtSelcName.getText());
 		}
-		else if(obj == btnUpImg) {
+		else if(obj == btnUpImg) { // 이미지추가
 			System.out.println("이미지업로드");
-			JOptionPane.showMessageDialog(this, "접근불가 : 준비중입니다.", "No Access", JOptionPane.ERROR_MESSAGE);
+			//JOptionPane.showMessageDialog(this, "접근불가 : 준비중입니다.", "No Access", JOptionPane.ERROR_MESSAGE);
+			if(jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+				String filename[] = jfc.getSelectedFile().toString().split("\\\\");
+				String fname = filename[filename.length - 1];
+				String path = "image\\" + fname;
+				File file = new File(path);
+				try {
+					System.out.println("이미지파일생성");
+					file.createNewFile();
+				} catch (IOException ioe) {
+					System.out.println("오류");
+					ioe.printStackTrace();
+				}
+				lbImg.setText("image/" + fname);
+				icon = imgsize();
+				imgLabel.setIcon(icon);
+				imgLabel.setBounds(0,60,150,200);
+			}
 		}
 		else if(obj == btnUpdatePhy) { // 신체 수정버튼
 			System.out.println("수정");
@@ -769,7 +807,6 @@ public class Home extends JFrame implements ActionListener{
 			default : JOptionPane.showMessageDialog(this, "잘못된 값입니다. 보기의 숫자만 입력하세요", "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 
-			System.out.println(arr[0] + " " + arr[1]);
 			jlists = jdao.sortJoin(arr);
 			rowData = new Object[jlists.size()][columnName.length];
 			dataInput();
@@ -849,6 +886,7 @@ public class Home extends JFrame implements ActionListener{
 				if(txtPhysical[i][2].getText().length() == 0) {
 					txtPhysical[i][2].setText("0.0");
 				}
+				
 				//저장
 				if(formCheck || txtPhysical[i][0].getText().equals(" ")) {
 					PhysicalBean pb = new PhysicalBean();
@@ -864,7 +902,9 @@ public class Home extends JFrame implements ActionListener{
 					pflag = true;
 					physicalUpdate();
 				} //else
+				
 			}
+			System.out.println(lists.size());
 			int cnt = phdao.physicalUpdate(lists);
 			System.out.println(cnt);
 		} //수정중일때 -> 
@@ -892,6 +932,7 @@ public class Home extends JFrame implements ActionListener{
 				txtFName[i].setEditable(true);
 				txtFbirth[i].setEditable(true);
 				txtPhone[i].setEditable(true);
+				btnUpImg.setEnabled(true);
 			}
 
 			// 수정할때 번호의 - 삭제
@@ -912,13 +953,16 @@ public class Home extends JFrame implements ActionListener{
 			// 수정불가능으로 변경함
 			txtAddr.setEditable(false);
 			txtNote.setEditable(false);
+			btnUpImg.setEnabled(false);
 
 			// 텍스트필드입력된값가져옴
 			pb.setAddr(txtAddr.getText());
 			pb.setNote(txtNote.getText());
 			pb.setP_no(Integer.parseInt(txtSelcNo.getText())); // 학생정보
+			pb.setImg_id(lbImg.getText());
 			System.out.println(pb.getP_no());
 			int pcnt = pdao.InfoUpdate(pb);
+			
 
 			//가족관계 수정불가능 + 텍필 입력값 list에 저장함
 			for (int i = 0; i < txtFName.length; i++) {
@@ -965,5 +1009,5 @@ public class Home extends JFrame implements ActionListener{
 		if(phdao != null)
 			phdao.exit();
 	}
-
+	
 }
