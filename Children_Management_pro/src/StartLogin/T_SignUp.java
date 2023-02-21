@@ -173,6 +173,15 @@ public class T_SignUp extends JFrame implements ActionListener, ItemListener{
 			return false;
 		}
 		
+		//아이디 검사
+		if(tdao.loginId(txtId.getText())>0) {
+			JOptionPane.showMessageDialog(this, "이미 존재하는 ID입니다.", "입력오류", JOptionPane.PLAIN_MESSAGE);
+			txtId.requestFocus();
+			txtId.setText("");
+			return false;
+		}
+		
+		
 		// 패스워드
 		if(txtPw.getText().length() == 0) {
 			JOptionPane.showMessageDialog(this, "PW를 입력하세요", "입력오류", JOptionPane.INFORMATION_MESSAGE);

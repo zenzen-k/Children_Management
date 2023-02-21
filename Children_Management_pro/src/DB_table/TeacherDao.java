@@ -115,6 +115,22 @@ public class TeacherDao {
 		return cnt;
 	}
 
-	
+	public int loginId(String txtId) {
+		int cnt = -1;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "select count(t_id) from teacher where t_id = ?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, txtId);
+			rs = ps.executeQuery();
+			if(rs.next())
+				cnt = rs.getInt("count(t_id)");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return cnt;
+	}
 	
 } // TeacherDao 클래스
